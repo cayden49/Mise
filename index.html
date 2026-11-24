@@ -344,7 +344,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   .tabbar a { flex: 1; font-size: .68rem; padding: .35rem 0; border-radius: 10px; } .tabbar svg { display: block; }
   .tabbar a.new { background: none; color: var(--accent); }
   #view { padding: 1rem .9rem 2rem; }
-  .r-head { grid-template-columns: 1fr; gap: 1rem; } .r-cover { aspect-ratio: 16/10; }
+  .r-head { grid-template-columns: 1fr; gap: 1rem; } .r-cover { aspect-ratio: 16/10; } .r-cover.ph { aspect-ratio: auto; height: 72px; } .r-cover.ph::before { font-size: 2.2rem; }
   .r-body, .notebook, .preview .r-body { grid-template-columns: 1fr; gap: 1.25rem; }
   .r-ing { position: static; max-height: none; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: .7rem; }
@@ -364,6 +364,10 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   .filters::-webkit-scrollbar { display: none; }
   .filters .dd-menu { position: fixed; left: 1rem; right: 1rem; top: auto; }
   .filters > * { flex-shrink: 0; }
+  .actions details.dd .dd-menu { position: fixed; left: .75rem; right: .75rem; top: auto; bottom: calc(env(safe-area-inset-bottom) + 74px); min-width: 0; z-index: 60;
+    padding: .5rem; border-radius: 16px; box-shadow: 0 -8px 40px rgba(0, 0, 0, .35); }
+  .actions details.dd .dd-menu button { padding: .85rem .9rem; font-size: 1rem; }
+  .actions details.dd[open]::before { content: ""; position: fixed; inset: 0; background: rgba(10, 12, 18, .35); z-index: 59; }
   .hide-sm { display: none; }
   .search { min-width: 0; flex-basis: 100%; max-width: none; }
 }
@@ -1046,10 +1050,22 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     return /^[A-Z &/'-]+$/.test(s) ? titleCase(s) : s.charAt(0).toUpperCase() + s.slice(1);
   };
 
+  /**
+   * "Banana Cottage Cheese Pancakes 1 cup cottage cheese" → title + first ingredient.
+   * Only splits on a real amount + unit after a few words, so "3 Ingredient Cookies" or "7 Up Cake" stay whole.
+   */
+  C.splitTitle = (t) => {
+    t = String(t || '').trim();
+    const m = C.normalizeFractions(t).match(/^(.{6,90}?\S)\s+((?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.\d+|\d+)\s*(?:-\s*\d+\s*)?(?:cups?|c\.|tbsps?|tablespoons?|tsps?|teaspoons?|g|grams?|kg|oz|ounces?|lbs?|pounds?|ml|cloves?|cans?|sticks?|pinch|large|medium|small|whole|eggs?)\b.*)$/i);
+    // ingredient lines are lowercase ("1 cup cottage cheese"); title words are capitalized ("2 Egg Sponge Cake")
+    if (!m || /\b(in|under|for)$/i.test(m[1]) || !/^[\d./\s-]+\s*[a-z]/.test(m[2]) || !/\s\S/.test(m[2].replace(/^[\d./\s-]+/, ''))) return { title: t, line: '' };
+    return { title: m[1].replace(/[\s:–—-]+$/, ''), line: m[2] };
+  };
+
   /** Parse pasted recipe text into a recipe draft. */
   C.parseRecipeText = (text, opts = {}) => {
     const r = C.newRecipe({ parts: [] });
-    const lines = String(text || '').replace(/\r/g, '').split('\n').map((l) => l.replace(/ /g, ' ').replace(/\s+$/, ''));
+    const lines = String(text || '').replace(/\r\n?/g, '\n').replace(/[\u2028\u2029\u0085\v\f]/g, '\n').split('\n').map((l) => l.replace(/ /g, ' ').replace(/\s+$/, ''));
     let state = 'head', ingPart = null, stepPart = null, desc = [], notes = [], hadIngHdr = false, hadStepHdr = false;
     const partFor = (name, kind) => {
       const nm = name ? cleanPartName(name) : '';
@@ -1106,7 +1122,12 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       for (const [re, key] of META) if ((mm = l.match(re)) && l.length < 50 && /\d/.test(l)) { const d = C.parseDuration(mm[mm.length - 1]); r.times[key] = d ? C.fmtDurationWords(d.sec) : mm[mm.length - 1]; metaHit = true; break; }
       if (metaHit) continue;
       if (state === 'head') {
-        if (!r.title && !looksLikeIngredient(l)) { r.title = l.replace(/^#+\s*/, '').slice(0, 120); continue; }
+        if (!r.title && !looksLikeIngredient(l)) {
+          const sp = C.splitTitle(l.replace(/^#+\s*/, ''));
+          r.title = sp.title.slice(0, 120);
+          if (sp.line) { state = 'ing'; ingPart = partFor('', 'ing'); ingPart.ingredients.push(C.parseIngredientLine(sp.line, opts)); }
+          continue;
+        }
         if (looksLikeIngredient(l) && !hadIngHdr) { state = 'ing'; }
         else { desc.push(l); continue; }
       }
@@ -1267,10 +1288,21 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     const oldSteps = C.allSteps(r);
     for (const p of parsed.parts) p.steps = p.steps.map((st) => { const o = oldSteps.find((x) => x.text === st.text); return o ? { id: o.id, text: st.text } : st; });
     const next = { ...C.clone(r), parts: parsed.parts.length ? parsed.parts : C.clone(r.parts) };
+    const ts2 = C.splitTitle(r.title);
+    let titleNote = '';
+    if (ts2.line) {
+      next.title = ts2.title;
+      const ing = C.parseIngredientLine(ts2.line);
+      if (!C.allIngredients(next).some((x) => C.normName(x.item) === C.normName(ing.item))) {
+        if (!next.parts.length) next.parts.push({ id: C.uid('p'), name: '', ingredients: [], steps: [] });
+        (next.parts.find((p) => p.ingredients.length) || next.parts[0]).ingredients.unshift(ing);
+      }
+      titleNote = `Title: “${ts2.title}” — moved “${ts2.line}” into the ingredients`;
+    }
     const det = C.detectMode(next, flat);
     next.mode = det.mode;
     if (next.mode === 'baking') for (const i of C.allIngredients(next)) if (i.flour == null && (i.role || C.guessRole(i.item)) === 'flour' && !i.fixed) i.flour = true;
-    const notes = [];
+    const notes = titleNote ? [titleNote] : [];
     if (next.mode !== r.mode) notes.push(`Mode: ${r.mode} → <b>${next.mode}</b>`);
     const secs = (x) => x.parts.filter((p) => p.name).map((p) => p.name);
     const a = secs(r), b = secs(next);
@@ -1280,7 +1312,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     else if (C.allSteps(r).map((x) => x.text).join('\n') !== C.allSteps(next).map((x) => x.text).join('\n')) notes.push('Some steps were rejoined');
     const lost = pool.filter((o) => (o.item || '').trim());
     if (lost.length) notes.push(`Turned into section titles: ${lost.map((o) => o.item).join(', ')}`);
-    return { changed: shape(r) !== shape(next), recipe: next, notes, why: det.why };
+    return { changed: shape(r) !== shape(next) || next.title !== r.title, recipe: next, notes, why: det.why };
   };
 
   // -------------------------------------------------------------- versions
