@@ -204,6 +204,35 @@ details.dd.right .dd-menu { left: auto; right: 0; }
 .versions li.conflict::before { border-color: var(--warn); } .versions p { margin: .2rem 0 .4rem; }
 .diff { list-style: none; padding: 0; } .diff li { padding: .4rem 0; border-bottom: 1px dashed var(--line); } .diff .added { color: var(--good); } .diff .removed { color: var(--danger); }
 
+/* ---------- video import & review */
+.review { margin: 0 0 1.5rem; } .review h2 { margin: 0; }
+.review-row { display: flex; gap: .75rem; overflow-x: auto; padding: .6rem 0 .3rem; scroll-snap-type: x proximity; }
+.rcard { flex: 0 0 260px; display: flex; gap: .7rem; align-items: center; padding: .55rem; border-radius: 12px; background: var(--surface); border: 1.5px dashed var(--warn);
+  text-decoration: none; color: inherit; scroll-snap-align: start; }
+.rcard:hover { box-shadow: var(--shadow); }
+.rc-img { position: relative; flex: 0 0 64px; height: 64px; border-radius: 8px; overflow: hidden; background: var(--surface-2); }
+.rc-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0; } .rc-img img.ok { opacity: 1; } .rc-img.ph::before { font-size: 1.6rem; }
+.rc-body { display: flex; flex-direction: column; gap: .15rem; min-width: 0; } .rc-body b { font-family: var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pill.flag { background: color-mix(in srgb, #e9b824 30%, transparent); color: #7a5600; }
+[data-theme="dark"] .pill.flag { color: #f3cf62; }
+.flagbox { border-left-color: #e0ad1a; background: color-mix(in srgb, #f5d36b 14%, var(--surface)); display: flex; flex-direction: column; gap: .45rem; }
+.flagbox .row { margin-top: .1rem; }
+details.raw[open] { flex-basis: 100%; } details.raw pre { max-height: 260px; overflow: auto; white-space: pre-wrap; font: .82rem/1.45 var(--mono); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: .6rem; margin: .4rem 0 0; }
+.ing-row.flag { background: color-mix(in srgb, #f5d36b 24%, transparent); border-radius: 8px; padding: .3rem; margin-left: -.3rem; margin-right: -.3rem; outline: 1.5px solid color-mix(in srgb, #e0ad1a 55%, transparent); }
+textarea.flag { border-color: #e0ad1a; box-shadow: 0 0 0 2px color-mix(in srgb, #f5d36b 35%, transparent); }
+.flagnote { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: .6rem; font-size: .85rem; color: #7a5600; padding: .15rem .1rem 0; }
+[data-theme="dark"] .flagnote { color: #f3cf62; }
+.ed-part > .flagnote { margin: .35rem 0; padding: .4rem .6rem; border-radius: 8px; background: color-mix(in srgb, #f5d36b 18%, transparent); }
+.video-in { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem 1.2rem; }
+.video-in h2 { margin-bottom: .3rem; }
+.helper { margin-top: .7rem; font-size: .85rem; color: var(--muted); } .helper.ok { color: var(--good); }
+.vlist { list-style: none; padding: 0; margin: .8rem 0 0; } .vlist li { display: flex; align-items: center; gap: .6rem; padding: .5rem 0; border-top: 1px dashed var(--line); }
+.vl-main { flex: 1; min-width: 0; display: flex; flex-direction: column; } .vl-main b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+.vl-main small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.rc-list { list-style: none; padding: 0; margin: .5rem 0; max-height: 55vh; overflow: auto; } .rc-list > li { padding: .55rem 0; border-top: 1px dashed var(--line); }
+.rc-list .diff { margin: .2rem 0 0 1.6rem; font-size: .88rem; } .rc-list .diff li { border: 0; padding: .1rem 0; }
+
 /* ---------- photos */
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .8rem; margin: 1rem 0; }
 .gallery figure { margin: 0; } .gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; cursor: zoom-in; background: var(--surface-2); display: block; }
@@ -260,7 +289,8 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
 .ed-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
 .ed-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .9rem 1.1rem; margin-bottom: 1.25rem; }
 .f { display: flex; flex-direction: column; gap: .3rem; } .f > span { font-size: .82rem; font-weight: 600; color: var(--ink-2); } .f.wide { grid-column: 1/-1; }
-.ed-part { border: 1px solid var(--line); border-radius: 14px; padding: 1rem; margin: 0 0 1rem; background: var(--surface); }
+.ed-part { border: 1px solid var(--line); border-radius: 14px; padding: 1rem; margin: 0 0 1rem; background: var(--surface); min-width: 0; min-inline-size: 0; }
+.ed-part > .row.between { flex-wrap: wrap; } .part-name { min-width: 10rem; }
 .ed-part legend { font: 600 1rem/1 var(--serif); padding: 0 .4rem; }
 .part-name { font: 600 1.1rem/1.2 var(--serif); border: 0; border-bottom: 2px dashed var(--line); border-radius: 0; background: transparent; padding: .3rem 0; flex: 1; }
 .ing-head, .ing-row { display: grid; grid-template-columns: 5rem 4.6rem minmax(9rem, 1.6fr) minmax(7rem, 1fr) auto 2rem; gap: .4rem; align-items: center; }
@@ -327,7 +357,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   .cook-ing { border-right: 0; } .cook-ing, .cook-steps { padding: 1rem 1rem 3rem; }
   .cook-head .btn.sm:not([data-act=log-cook]) { display: none; }
   .ing-head { display: none; }
-  .ing-row, .ing-row.baking { grid-template-columns: 4.2rem 4rem 1fr 2rem; padding: .5rem 0; border-bottom: 1px dashed var(--line); }
+  .ing-row, .ing-row.baking { grid-template-columns: 3.8rem 4.9rem 1fr 2rem; padding: .5rem 0; border-bottom: 1px dashed var(--line); }
   .ing-row .nt { grid-column: 1 / 4; } .ing-row .opts { grid-column: 1 / -1; flex-wrap: wrap; } .ing-row .x { grid-row: 1; grid-column: 4; }
   .timer { min-width: 210px; }
   .filters { flex-wrap: nowrap; overflow-x: auto; margin-left: -.9rem; margin-right: -.9rem; padding: 0 .9rem 1rem; scrollbar-width: none; }
@@ -992,6 +1022,24 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     if (l.length <= 30 && /^[A-Z][A-Z &/'-]+$/.test(l) && !/^(INGREDIENTS?|INSTRUCTIONS?|DIRECTIONS?|METHOD|NOTES?)$/.test(l)) return l;
     return null;
   };
+  const SMALLW = new Set(['a', 'an', 'the', 'and', 'or', 'of', 'with', 'to', 'in', 'on', 'for', 'into', 'at', 'by', 'from', 'your', 'it', 'is', '&', '+', '-', '–', '/']);
+  const stripMd = (l) => l.replace(/^#{1,6}\s*/, '').replace(/\*\*(.+?)\*\*/g, '$1').replace(/__(.+?)__/g, '$1').replace(/^\*(.+)\*$/, '$1').trim();
+  const stripNum = (l) => l.replace(/^(step|part|phase|stage)\s*\d+\s*[:.)\-–—]?\s*/i, '').replace(/^\d+([.)]\d+)*[.):]\s+/, '').replace(/^[a-h][.)]\s+/, '').replace(/^[\-*•▪︎·◦]\s*/, '').trim();
+  /** A section title such as "Mix the Dough" or "Brown Butter + Infuse Earl Grey": short, title-cased, not a sentence. */
+  const isMdHeading = (raw) => /^#{1,6}\s+\S/.test(raw) || /^\*\*[^*]+\*\*:?$/.test(raw.trim()) || /^__[^_]+__:?$/.test(raw.trim());
+  const headerText = (raw) => {
+    const t = stripNum(stripMd(raw));
+    if (!t || t.length > 60 || /[.!?;,]$/.test(t) || (/:$/.test(t) && t.includes(','))) return null;
+    if (isMdHeading(raw)) return t.replace(/:$/, '').trim(); // explicit heading markup always counts
+    if (/[{}]|\d+\s*°|\b\d+\s*(min|minutes?|hours?|hrs?|seconds?)\b/i.test(t)) return null;
+    const words = t.replace(/\(.*?\)/g, ' ').replace(/:$/, '').split(/\s+/).filter(Boolean);
+    const big = words.filter((w) => !SMALLW.has(w.toLowerCase()));
+    if (!big.length || words.length > 9) return null;
+    if (words.length === 1 && !/^(assembly|filling|topping|glaze|frosting|icing|sauce|dough|batter|crust|dressing|marinade|garnish|finishing|baking|to serve|serving)$/i.test(words[0])) return null;
+    const capped = big.filter((w) => /^[A-Z0-9(]/.test(w)).length;
+    return capped / big.length >= 0.75 ? t.replace(/:$/, '').trim() : null;
+  };
+  const sigWords = (s) => C.normName(s).split(/[^a-z0-9]+/).filter((w) => w.length > 2 && !SMALLW.has(w) && !/^(make|mix|prepare|prep|the|add|create|assemble|infuse|cook)$/.test(w));
   const titleCase = (s) => s.toLowerCase().replace(/\b([a-z])/g, (m) => m.toUpperCase());
   const cleanPartName = (s) => {
     s = s.replace(/^for (the )?/i, '').replace(/:$/, '').trim();
@@ -1007,6 +1055,11 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       const nm = name ? cleanPartName(name) : '';
       let p = r.parts.find((x) => C.normName(x.name) === C.normName(nm) && (kind === 'ing' || x.steps.length === 0));
       if (!p && kind === 'step' && nm) p = r.parts.find((x) => C.normName(x.name) && (C.normName(x.name).includes(C.normName(nm)) || C.normName(nm).includes(C.normName(x.name))) && x.steps.length === 0);
+      if (!p && kind === 'step' && nm) {
+        // "Brown Butter + Infuse Earl Grey" ↔ ingredient group "Earl Grey Brown Butter"
+        const a = new Set(sigWords(nm));
+        p = r.parts.find((x) => { if (x.steps.length || !x.name) return false; const b = sigWords(x.name); const shared = b.filter((w) => a.has(w)).length; return shared >= 2 || (shared >= 1 && shared >= Math.min(a.size, b.length) * 0.6); });
+      }
       if (!p && kind === 'step' && !nm) {
         // unnamed step group: if there's exactly one ingredient part, attach steps to it
         if (r.parts.length === 1 && r.parts[0].steps.length === 0) p = r.parts[0];
@@ -1014,15 +1067,25 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       if (!p) { p = { id: C.uid('p'), name: nm || (kind === 'step' && r.parts.length ? 'Method' : ''), ingredients: [], steps: [] }; r.parts.push(p); }
       return p;
     };
+    let listStep = null; // a step ending in ":" collects the short list that follows ("then add: honey, salt, …")
+    const closeList = () => { if (listStep && listStep._n && !/[.!?]$/.test(listStep.text)) listStep.text += '.'; if (listStep) delete listStep._n; listStep = null; };
     const addStep = (l) => {
-      let t = l.replace(/^(step\s*)?\d+[.):]?\s*/i, '').replace(/^[\-*•]\s*/, '').trim();
+      if (/^step\s*\d+\s*:?$/i.test(l.trim())) return;
+      let t = stripNum(stripMd(l));
       if (!t) return;
-      if (/^step\s*\d+$/i.test(l.trim())) return;
       if (!stepPart) stepPart = partFor('', 'step');
+      if (listStep && t.length <= 60 && !/[.!?]$/.test(t)) {
+        listStep.text += (listStep._n ? ', ' : ' ') + t.replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase());
+        listStep._n = (listStep._n || 0) + 1;
+        return;
+      }
+      closeList();
       const prev = stepPart.steps[stepPart.steps.length - 1];
+      // a hard-wrapped line continues the previous step
       if (prev && !/[.!?:)]$/.test(prev.text) && /^[a-z(]/.test(t)) prev.text += ' ' + t;
-      else stepPart.steps.push({ id: C.uid('s'), text: t });
+      else { const st = { id: C.uid('s'), text: t }; stepPart.steps.push(st); if (/:$/.test(t)) listStep = st; }
     };
+    const nextLine = (k) => { for (let j = k + 1; j < lines.length; j++) if (lines[j].trim()) return lines[j].trim(); return ''; };
     let i = 0, inNutrition = false;
     for (; i < lines.length; i++) {
       const l = lines[i].trim();
@@ -1050,6 +1113,13 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       if (state === 'ing') {
         const sh = subHeader(l);
         if (sh && !looksLikeIngredient(l)) { ingPart = partFor(sh, 'ing'); continue; }
+        // title-cased group name with no amount, followed by an ingredient with an amount → section
+        const BUL = /^[\-*•▪︎·◦]/;
+        const hd = !looksLikeIngredient(l) && !BUL.test(l) ? headerText(l) : null;
+        const nx = nextLine(i), prevRaw = (lines[i - 1] || '').trim();
+        // only a header if it *starts* a group: un-bulleted among bullets, or after a blank line / the Ingredients heading
+        const startsGroup = BUL.test(nx) || !prevRaw || ING_HDR.test(prevRaw);
+        if (hd && startsGroup && nx && looksLikeIngredient(nx) && QTY_RE.test(C.normalizeFractions(stripNum(nx)))) { ingPart = partFor(hd, 'ing'); continue; }
         if (!looksLikeIngredient(l) && looksLikeStep(l) && !hadStepHdr) { state = 'steps'; addStep(l); continue; }
         if (!looksLikeIngredient(l) && l.length > 90) { state = 'steps'; addStep(l); continue; }
         if (!ingPart) ingPart = partFor('', 'ing');
@@ -1057,25 +1127,60 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
         continue;
       }
       if (state === 'steps') {
-        const sh = subHeader(l);
-        if (sh && !/^(step\s*)?\d+/i.test(l)) { stepPart = partFor(sh, 'step'); continue; }
+        // a section title is followed by a real step, not by another title (so "1. Preheat the Oven / 2. Mix the Batter" stay steps)
+        const hd = !(listStep && /^[\-*•▪︎·◦]/.test(l)) ? headerText(l) : null;
+        const nx = nextLine(i);
+        // inside a "…then add:" list, a short line is a list item unless it's clearly a title (not an ingredient, followed by a sentence)
+        const isIng = (t) => { const n = C.normName(t); return !!n && C.allIngredients(r).some((x) => { const m = C.normName(x.item); return m && (m === n || m.includes(n)); }); };
+        const inList = listStep && l.length <= 30 && !isMdHeading(l);
+        const titleInList = inList && hd && !isIng(hd) && /[.!?]$/.test(nx) && hd.split(/\s+/).length >= 2;
+        if (hd && nx && (isMdHeading(l) || !headerText(nx)) && (!inList || titleInList)) { closeList(); stepPart = partFor(hd, 'step'); continue; }
+        const sh = !hd ? subHeader(l) : null;
+        if (sh && !/^(step\s*)?\d+/i.test(l) && !/,/.test(l) && headerText(sh + '')) { closeList(); stepPart = partFor(sh, 'step'); continue; }
         addStep(l); continue;
       }
       if (state === 'notes') { notes.push(l); continue; }
     }
+    closeList();
     r.parts = r.parts.filter((p) => p.ingredients.length || p.steps.length);
     if (!r.parts.length) r.parts = [{ id: C.uid('p'), name: '', ingredients: [], steps: [] }];
     r.description = desc.join(' ').slice(0, 600);
     r.notes = notes.join('\n');
     if (!r.title) r.title = 'Untitled recipe';
     // mode detection
-    const ings = C.allIngredients(r);
-    const hasFlour = ings.some((x) => x.role === 'flour'), leaven = ings.some((x) => ['yeast', 'levain'].includes(x.role));
-    if (hasFlour && (leaven || /\b(bread|dough|loaf|focaccia|pizza|bagel|brioche|baguette|rolls?|buns?|ciabatta|sourdough|pie crust|scones?|biscuits?|croissants?)\b/i.test(r.title))) r.mode = 'baking';
+    const dm = C.detectMode(r);
+    r.mode = dm.mode; r._modeWhy = dm.why;
     // equipment hints
     const all = (r.title + ' ' + C.allSteps(r).map((s) => s.text).join(' ')).toLowerCase();
     for (const [eq, re] of C.EQUIP_HINTS) if (re.test(all)) r.equipment.push(eq);
     return r;
+  };
+
+  const BAKED = /\b(breads?|dough|loaf|loaves|focaccia|pizza dough|bagels?|brioche|baguettes?|rolls?|buns?|ciabatta|sourdough|challah|babka|pretzels?|crusts?|scones?|biscuits?|croissants?|danish|cookies?|biscotti|shortbread|macarons?|brownies?|blondies?|bars|cakes?|cupcakes?|cheesecake|muffins?|pies?|tarts?|tartlets?|galettes?|pastry|pastries|puff|choux|eclairs?|cobbler|crumble|madeleines?|financiers?|quick ?bread|banana bread|cornbread|naan|pita|tortillas?|flatbread|english muffins?|donuts?|doughnuts?)\b/i;
+  const NOT_BAKED = /\b(pancakes?|waffles?|crepes?|cr[eê]pes?|fritters?|dumplings?|tempura|gravy|soup|stew|chili|curry|stir[- ]?fry|noodles?|pasta(?! dough)|risotto|fried|deep[- ]?fr(y|ied)|pot pie|chicken|beef|pork|shrimp|salmon|tofu)\b/i;
+  /**
+   * Cooking or baking? Weighs title words, how much flour there is, leaveners, and oven/dough words in the steps.
+   * Returns {mode, why[]} so the UI can explain the guess.
+   */
+  C.detectMode = (r, flat) => {
+    flat = flat || C.flatDensities(C.defaultPantry());
+    const ings = C.allIngredients(r), steps = C.allSteps(r).map((x) => x.text).join(' ').toLowerCase(), title = r.title || '';
+    const flourIngs = ings.filter((x) => (x.role || C.guessRole(x.item)) === 'flour' && !x.fixed && !/dredg|coat|dust/i.test((x.note || '') + ' ' + x.item));
+    if (!flourIngs.length) return { mode: 'cooking', why: ['no flour'] };
+    let score = 0; const why = [];
+    const tb = title.match(BAKED), tn = title.match(NOT_BAKED);
+    if (tb && !(tn && !/\b(dough|crust|bread)\b/i.test(tb[0]))) { score += 3; why.push(`“${tb[0].toLowerCase()}” in the title`); }
+    if (tn && !tb) { score -= 3; why.push(`“${tn[0].toLowerCase()}” in the title`); }
+    const flourG = flourIngs.reduce((a, x) => a + (C.toGrams(x, x.qty, flat) || 0), 0);
+    const totalG = ings.reduce((a, x) => a + (C.toGrams(x, x.qty, flat) || 0), 0);
+    if (flourG >= 120 || (totalG > 0 && flourG / totalG >= 0.25)) { score += 2; why.push(`${Math.round(flourG)} g flour`); }
+    else if (flourG > 0 && flourG < 40) { score -= 2; why.push('only a little flour'); }
+    if (ings.some((x) => ['yeast', 'levain'].includes(x.role || C.guessRole(x.item)))) { score += 2; why.push('yeast or starter'); }
+    else if (ings.some((x) => /\b(baking (soda|powder)|cream of tartar|bicarbonate)\b/i.test(x.item))) { score += 1; why.push('baking soda/powder'); }
+    if (/\b(bake|baked|baking|oven|preheat|cooling rack|baking (sheet|tray|pan)|loaf pan|parchment)\b/.test(steps)) { score += 1; why.push('oven steps'); }
+    if (/\b(knead|proof|prove|rise|bulk ferment|shape|score|laminate|cream (the )?butter)\b/.test(steps)) { score += 1; why.push('dough steps'); }
+    if (/\b(deep[- ]?fry|fry|frying|griddle|skillet|saut[eé]|simmer|wok)\b/.test(steps) && !/\bbake\b/.test(steps)) { score -= 2; why.push('stovetop steps'); }
+    return { mode: score >= 3 ? 'baking' : 'cooking', why, score };
   };
 
   C.EQUIPMENT = ['Cast iron', 'Dutch oven', 'Stand mixer', 'Pizza steel', 'Pizza stone', 'Sheet pan', 'Loaf pan', 'Air fryer', 'Induction plate',
@@ -1087,6 +1192,96 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     ['Grill', /\bgrill\b|grill grates/], ['Smoker', /smoker/], ['Blender', /blender/], ['Food processor', /food processor/], ['Sous vide', /sous vide/],
     ['Wok', /\bwok\b/], ['Banneton', /banneton|proofing basket/], ['Oven', /preheat (the )?oven|°f oven|\boven to\b/],
   ];
+
+  // ----------------------------------------------------- uncertainty flags
+  const VAGUE_ING = [
+    [/\b(a |one )?(splash|drizzle|glug|knob|dollop|squeeze|sprinkle|smidge|touch)( of)?\b/i, 'Vague amount'],
+    [/\b(a (little|bit|few)|some|several|a couple( of)?)\b/i, 'No exact amount'],
+    [/\b(heaping|heaped|scant|generous|rounded)\b/i, 'Approximate measure'],
+    [/\bhandfuls?\b/i, 'Handful — weigh it once'],
+    [/\b(eyeball|to your liking|as much as you (like|want)|however much)\b/i, 'Eyeballed'],
+  ];
+  const VAGUE_STEP = [
+    [/\buntil (it )?(doesn'?t|does not|no longer) stick/i, 'Feel-based cue — note what it looked like'],
+    [/\buntil (it )?(looks|feels|seems) (right|good|done)/i, 'Feel-based doneness cue'],
+    [/\b(eyeball|a while|for a bit|a few minutes|some time)\b/i, 'Vague time'],
+  ];
+  /** Flag vague amounts and feel-based cues so the editor can highlight them for review. */
+  C.flagVague = (r) => {
+    const flags = [];
+    for (const p of r.parts || []) {
+      for (const i of p.ingredients || []) {
+        if (i.sub) continue;
+        const txt = `${i.item || ''} ${i.note || ''}`;
+        let hit = null;
+        for (const [re, why] of VAGUE_ING) { const m = txt.match(re); if (m) { hit = [why, m[0]]; break; } }
+        if (!hit && i.qty == null && !i.fixed && (i.item || '').trim() && !/to taste|optional|garnish|for serving/i.test(txt)) hit = ['No amount given', ''];
+        if (hit) flags.push({ id: C.uid('f'), target: 'ing', ref: i.id, reason: hit[0], phrase: hit[1] });
+      }
+      for (const st of p.steps || []) {
+        for (const [re, why] of VAGUE_STEP) { const m = st.text.match(re); if (m) { flags.push({ id: C.uid('f'), target: 'step', ref: st.id, reason: why, phrase: m[0] }); break; } }
+      }
+    }
+    return flags;
+  };
+  C.PLATFORM = (url) => /tiktok/i.test(url) ? 'TikTok' : /instagram/i.test(url) ? 'Instagram' : /youtu/i.test(url) ? 'YouTube' : /facebook|fb\.watch/i.test(url) ? 'Facebook' : 'video';
+
+  // ----------------------------------------------------- re-check with the latest parser
+  /** Write a saved recipe back out as plain text the parser understands (ingredients + steps only). */
+  C.recipeToText = (r) => {
+    const q = (v) => String(+(+v).toFixed(6));
+    const L = ['Ingredients'];
+    for (const p of r.parts || []) {
+      if (!(p.ingredients || []).length) continue;
+      if (p.name) L.push('', p.name.replace(/:$/, '') + ':');
+      for (const i of p.ingredients) {
+        const amt = i.qty == null ? '' : q(i.qty) + (i.qtyMax != null ? '-' + q(i.qtyMax) : '');
+        L.push('- ' + [amt, i.unit ? C.unitLabel(i.unit, 1) : '', i.item].filter(Boolean).join(' ') + (i.note ? ', ' + i.note : ''));
+      }
+    }
+    L.push('', 'Instructions');
+    for (const p of r.parts || []) {
+      if (!(p.steps || []).length) continue;
+      if (p.name) L.push('### ' + p.name);
+      for (const st of p.steps) L.push(st.text);
+    }
+    return L.join('\n');
+  };
+  const shape = (r) => JSON.stringify([r.mode, (r.parts || []).map((p) => [p.name, (p.ingredients || []).map((i) => i.id), (p.steps || []).map((x) => x.text)])]);
+  /**
+   * Re-run the current parser over a saved recipe. Keeps every existing ingredient object (with its flags,
+   * links and edits) by matching names, keeps step ids where text is unchanged, and re-detects the mode.
+   * Returns {changed, recipe, notes[], why[]}.
+   */
+  C.recheckRecipe = (r, flat) => {
+    const parsed = C.parseRecipeText(C.recipeToText(r));
+    const pool = C.allIngredients(r).slice();
+    for (const p of parsed.parts) {
+      p.ingredients = p.ingredients.map((ni) => {
+        const k = pool.findIndex((o) => C.normName(o.item) === C.normName(ni.item));
+        return k < 0 ? ni : pool.splice(k, 1)[0];
+      });
+      const old = r.parts.find((x) => C.normName(x.name) === C.normName(p.name));
+      if (old) { p.id = old.id; p.name = old.name; }
+    }
+    const oldSteps = C.allSteps(r);
+    for (const p of parsed.parts) p.steps = p.steps.map((st) => { const o = oldSteps.find((x) => x.text === st.text); return o ? { id: o.id, text: st.text } : st; });
+    const next = { ...C.clone(r), parts: parsed.parts.length ? parsed.parts : C.clone(r.parts) };
+    const det = C.detectMode(next, flat);
+    next.mode = det.mode;
+    if (next.mode === 'baking') for (const i of C.allIngredients(next)) if (i.flour == null && (i.role || C.guessRole(i.item)) === 'flour' && !i.fixed) i.flour = true;
+    const notes = [];
+    if (next.mode !== r.mode) notes.push(`Mode: ${r.mode} → <b>${next.mode}</b>`);
+    const secs = (x) => x.parts.filter((p) => p.name).map((p) => p.name);
+    const a = secs(r), b = secs(next);
+    if (JSON.stringify(a) !== JSON.stringify(b)) notes.push(b.length ? `Sections: ${b.join(' · ')}` : 'Sections removed');
+    const sa = C.allSteps(r).length, sb = C.allSteps(next).length;
+    if (sa !== sb) notes.push(`Steps: ${sa} → <b>${sb}</b>${sb < sa ? ' (lists folded into their steps, titles turned into headings)' : ''}`);
+    else if (C.allSteps(r).map((x) => x.text).join('\n') !== C.allSteps(next).map((x) => x.text).join('\n')) notes.push('Some steps were rejoined');
+    const lost = pool.filter((o) => (o.item || '').trim());
+    if (lost.length) notes.push(`Turned into section titles: ${lost.map((o) => o.item).join(', ')}`);
+    return { changed: shape(r) !== shape(next), recipe: next, notes, why: det.why };
+  };
 
   // -------------------------------------------------------------- versions
   C.nextVersion = (v, major) => {
@@ -1429,6 +1624,30 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       return d;
     }
     saveDensities(d) { return writeFile(this.root, 'pantry-densities.json', d); }
+
+    // video-helper inbox: the app only ever appends to these files; the helper owns video-imports.json
+    async _inbox() { return this.root.getDirectoryHandle('_inbox', { create: true }); }
+    async appendLine(file, line) {
+      const d = await this._inbox();
+      const fh = await d.getFileHandle(file, { create: true });
+      const f = await fh.getFile();
+      const prev = f.size ? await f.text() : '';
+      const w = await fh.createWritable({ keepExistingData: true });
+      await w.seek(f.size);
+      await w.write((prev && !prev.endsWith('\n') ? '\n' : '') + line + '\n');
+      await w.close();
+    }
+    async readImportStatus() {
+      try {
+        const d = await this.root.getDirectoryHandle('_inbox');
+        const f = await (await d.getFileHandle('video-imports.json')).getFile();
+        return { data: JSON.parse(await f.text()), mtime: f.lastModified };
+      } catch (e) { return null; }
+    }
+    async hasRecipeFolderFor(id) {
+      for await (const [n] of this.recipesDir.entries()) if (n.endsWith('--' + id)) return true;
+      return false;
+    }
 
     // bundles drop-box
     async listBundles() {
@@ -1882,7 +2101,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     const L = S.lib, now = Date.now();
     let out = [];
     for (const e of S.recipes.values()) {
-      const r = e.recipe; if (r.deleted) continue;
+      const r = e.recipe; if (r.deleted || r.draft) continue;
       if (L.mode !== 'all' && r.mode !== L.mode) continue;
       if (L.equip.length && !L.equip.every((q) => (r.equipment || []).includes(q))) continue;
       if (L.tags.length && !L.tags.every((q) => (r.tags || []).includes(q))) continue;
@@ -1913,7 +2132,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
 
   function renderLibrary() {
     const L = S.lib;
-    const total = [...S.recipes.values()].filter((e) => !e.recipe.deleted).length;
+    const total = [...S.recipes.values()].filter((e) => !e.recipe.deleted && !e.recipe.draft).length;
     const tags = allTags(), equip = allEquip();
     const dd = (key, label, items) => `
       <details class="dd" data-dd="${key}"><summary class="chip ${L[key].length ? 'on' : ''}">${label}${L[key].length ? ` · ${L[key].length}` : ''}</summary>
@@ -1940,15 +2159,31 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
             ${[['updated', 'Recently edited'], ['cooked', 'Recently cooked'], ['most', 'Most cooked'], ['rating', 'Top rated'], ['title', 'A → Z'], ['created', 'Newest']].map(([v, l]) => `<option value="${v}" ${L.sort === v ? 'selected' : ''}>Sort: ${l}</option>`).join('')}</select>
           ${L.q || L.mode !== 'all' || L.equip.length || L.tags.length || +L.rating || L.cooked !== 'any' ? `<button class="chip clear" data-act="lib-clear">Clear</button>` : ''}
         </div>
+        ${reviewStrip()}
         <div class="grid" id="grid"></div>
       </section>`;
     renderGrid();
   }
+  const drafts = () => [...S.recipes.values()].filter((e) => e.recipe.draft && !e.recipe.deleted).map((e) => e.recipe).sort((a, b) => ts(b.createdAt) - ts(a.createdAt));
+  function reviewStrip() {
+    const ds = drafts();
+    if (!ds.length) return '';
+    return `<section class="review">
+      <div class="row between"><h2>To review <span class="mono muted">${ds.length}</span></h2><span class="small muted">From the video helper — check the yellow items, then save.</span></div>
+      <div class="review-row">${ds.map((r) => {
+        const im = r.import || {}, cv = coverOf(r), nf = (im.flags || []).length;
+        return `<a class="rcard" href="#/edit/${r.id}">
+          <div class="rc-img ${cv ? '' : 'ph'}" data-letter="${esc((r.title || '?')[0])}">${cv ? `<img data-ph="${r.id}|${cv.thumb || cv.file}" alt="">` : ''}</div>
+          <div class="rc-body"><b>${esc(r.title)}</b>
+            <span class="small muted">${esc(im.platform || C.PLATFORM(im.url || ''))}${im.creator ? ' · ' + esc(im.creator) : ''}</span>
+            <span class="small">${im.needsParse ? '<span class="pill warn">raw text</span>' : nf ? `<span class="pill flag">${nf} to check</span>` : '<span class="pill">ready</span>'} <span class="muted">${rel(ts(im.at || r.createdAt))}</span></span></div></a>`;
+      }).join('')}</div></section>`;
+  }
   function renderGrid() {
     const g = $('#grid'); if (!g) return;
     const list = filtered();
-    const total = [...S.recipes.values()].filter((e) => !e.recipe.deleted).length;
-    if (!total) {
+    const total = [...S.recipes.values()].filter((e) => !e.recipe.deleted && !e.recipe.draft).length;
+    if (!total && !drafts().length) {
       g.innerHTML = `<div class="empty">
         <div class="empty-mark">✕</div>
         <h2>Your notebook is empty</h2>
@@ -1956,6 +2191,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
         <div class="row gap center"><a class="btn primary" href="#/import">Paste a recipe</a><a class="btn" href="#/new">Write one</a><button class="btn ghost" data-act="samples">Load sample recipes</button></div></div>`;
       return;
     }
+    if (!total) { g.innerHTML = `<div class="empty small"><p>Nothing saved yet — review the imports above and they’ll land here.</p></div>`; return; }
     if (!list.length) { g.innerHTML = `<div class="empty small"><p>No recipes match. <button class="btn sm ghost" data-act="lib-clear">Clear filters</button></p></div>`; return; }
     const shown = list.slice(0, S.libLimit || 120);
     g.innerHTML = shown.map(({ e, st }) => {
@@ -2097,6 +2333,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
               <a class="btn" href="#/edit/${r.id}">Edit</a>
               <button class="btn" data-act="save-version" data-id="${r.id}">Save version</button>
               <details class="dd right"><summary class="btn ghost" aria-label="More">•••</summary><div class="dd-menu">
+                <button data-act="recheck" data-id="${r.id}">Re-check with latest parser</button>
                 <button data-act="duplicate" data-id="${r.id}">Duplicate</button>
                 <button data-act="export-one" data-id="${r.id}">Share / export file</button>
                 <button data-act="print">Print</button>
@@ -2289,7 +2526,16 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     if (!S.draft || S.draft._for !== (id || 'new')) {
       const base = id ? get(id) && get(id).recipe : S.importDraft || C.newRecipe();
       if (!base) return go('#/');
-      S.draft = toDraft(base); S.draft._for = id || 'new'; S.draft._isNew = !id; S.importDraft = null;
+      let src = base;
+      if (base.draft && base.import && base.import.needsParse) {
+        // helper ran without the local AI: parse its raw text with Mise's own parser
+        const pr = C.parseRecipeText(base.import.text.replace(/^[A-Z][A-Z -]+(\(.*\))?:\s*$/gm, ''));
+        src = { ...C.clone(base), parts: pr.parts, mode: pr.mode, servings: pr.servings, servingsLabel: pr.servingsLabel, times: pr.times,
+          equipment: [...new Set([...(base.equipment || []), ...pr.equipment])], notes: [base.notes, pr.notes].filter(Boolean).join('\n'),
+          import: { ...base.import, needsParse: false, flags: C.flagVague(pr) } };
+      }
+      if (!id && S.importDraft) src = { ...src, import: { kind: 'paste', flags: C.flagVague(src) } };
+      S.draft = toDraft(src); S.draft._for = id || 'new'; S.draft._isNew = !id; S.importDraft = null;
       if (!S.draft.parts.length) S.draft.parts.push({ id: C.uid('p'), name: '', ingredients: [], steps: [], _steps: '' });
       for (const p of S.draft.parts) if (!p.ingredients.length) p.ingredients.push(blankIng());
     }
@@ -2297,6 +2543,23 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     drawEditor();
   }
   const blankIng = () => ({ id: C.uid('i'), _qty: '', _unit: '', item: '', note: '' });
+  const flagsFor = (d, target, ref) => ((d.import && d.import.flags) || []).filter((f) => f.target === target && f.ref === ref);
+  function importBanner(d) {
+    const im = d.import; if (!im) return '';
+    const fl = im.flags || [];
+    if (im.kind === 'paste') return fl.length ? `<div class="banner flagbox"><b>${fl.length} thing${fl.length > 1 ? 's' : ''} to check</b> — vague amounts or cues are highlighted. Tap “Looks right” to clear one.</div>` : '';
+    const plat = im.platform && im.platform !== 'Local file' ? im.platform : C.PLATFORM(im.url || '');
+    const how = (im.sources || []).join(', ') || 'video';
+    return `<div class="banner flagbox">
+      <div><b>Imported from ${esc(plat)}</b>${im.creator ? ` · ${esc(im.creator)}` : ''} — read from ${esc(how)}${im.seconds ? ` in ${esc(im.seconds)} s` : ''}${im.llm ? ', structured by local AI' : ', parsed by Mise'}.</div>
+      <div class="small">${fl.length ? `<b>${fl.length} highlighted item${fl.length > 1 ? 's' : ''}</b> need a look — vague amounts (“a splash”), missing quantities, or words the transcript may have misheard.` : 'Nothing flagged, but give amounts a quick look.'}
+        ${(im.sources || []).includes('speech') ? ' Spoken numbers are the most common mistake (fifteen vs fifty).' : ''}${(im.sources || []).includes('on-screen text') ? ' On-screen text can have OCR typos.' : ''}</div>
+      <div class="row gap-s wrap">${im.url ? `<a class="btn xs" href="${esc(im.url)}" target="_blank" rel="noopener">Watch the video ↗</a>` : ''}
+        <details class="raw"><summary class="btn xs ghost">What Mise heard &amp; read</summary><pre>${esc(im.text || '')}</pre></details>
+        ${d.draft ? `<button type="button" class="btn xs ghost danger" data-act="draft-discard">Discard this import</button>` : ''}</div>
+    </div>`;
+  }
+  const flagNote = (f) => `<div class="flagnote"><span>⚠ ${esc(f.reason)}${f.phrase ? ` — “${esc(f.phrase)}”` : ''}</span><button type="button" class="btn xs" data-act="flag-ok" data-f="${f.id}">Looks right</button></div>`;
   function drawEditor() {
     const d = S.draft, baking = d.mode === 'baking';
     const others = [...S.recipes.values()].filter((e) => !e.recipe.deleted && e.recipe.id !== d.id).map((e) => e.recipe).sort((a, b) => a.title.localeCompare(b.title));
@@ -2304,9 +2567,10 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     $('#view').innerHTML = `
       <form class="editor" onsubmit="return false">
         <div class="ed-head">
-          <h1>${d._isNew ? 'New recipe' : 'Edit recipe'}</h1>
+          <h1>${d.draft ? 'Review import' : d._isNew ? 'New recipe' : 'Edit recipe'}</h1>
           <div class="row gap-s"><button type="button" class="btn ghost" data-act="ed-cancel">Cancel</button><button type="button" class="btn primary" data-act="ed-save">Save</button></div>
         </div>
+        ${importBanner(d)}
         <div class="ed-grid">
           <label class="f wide"><span>Title</span><input data-bind="title" value="${esc(d.title)}" placeholder="e.g. Neapolitan pizza dough" required></label>
           <div class="f"><span>Mode</span><div class="seg">${['cooking', 'baking'].map((m) => `<button type="button" class="${d.mode === m ? 'on' : ''}" data-act="ed-mode" data-v="${m}">${m === 'cooking' ? 'Cooking<span class="hide-sm"> · smart scaling</span>' : 'Baking<span class="hide-sm"> · baker’s math</span>'}</button>`).join('')}</div></div>
@@ -2330,7 +2594,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
           </div>
           <div class="ing-head ${baking ? 'baking' : ''}"><span>Qty</span><span>Unit</span><span>Ingredient</span><span>Note</span><span>Options</span><span></span></div>
           ${p.ingredients.map((i, ii) => `
-          <div class="ing-row ${baking ? 'baking' : ''} ${i.sub ? 'linked' : ''}">
+          <div class="ing-row ${baking ? 'baking' : ''} ${i.sub ? 'linked' : ''} ${flagsFor(d, 'ing', i.id).length ? 'flag' : ''}">
             <input data-bind="parts.${pi}.ingredients.${ii}._qty" value="${esc(i._qty)}" placeholder="1 ½" inputmode="decimal" class="q" aria-label="quantity">
             <input data-bind="parts.${pi}.ingredients.${ii}._unit" value="${esc(i._unit)}" placeholder="g" list="units" class="u" aria-label="unit">
             ${i.sub ? `<select data-bind="parts.${pi}.ingredients.${ii}.sub" class="it">${others.map((o) => `<option value="${o.id}" ${o.id === i.sub ? 'selected' : ''}>↳ ${esc(o.title)}</option>`).join('')}</select>`
@@ -2343,6 +2607,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
               <button type="button" class="btn xs ghost" data-act="${i.sub ? 'ing-unlink' : 'ing-link'}" data-p="${pi}" data-i="${ii}" title="${i.sub ? 'Unlink sub-recipe' : 'Use another recipe as this ingredient'}" ${!i.sub && !others.length ? 'disabled' : ''}>${i.sub ? 'unlink' : '↳ link'}</button>
             </div>
             <button type="button" class="btn xs ghost x" data-act="ing-del" data-p="${pi}" data-i="${ii}" aria-label="remove">✕</button>
+            ${flagsFor(d, 'ing', i.id).map(flagNote).join('')}
           </div>`).join('')}
           <div class="row gap-s wrap">
             <button type="button" class="btn sm" data-act="ing-add" data-p="${pi}">+ Ingredient</button>
@@ -2351,7 +2616,8 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
               <button type="button" class="btn sm" data-act="ing-bulk" data-p="${pi}">Add these</button></details>
           </div>
           <label class="f wide"><span>Steps <small class="muted">— one per line. Times like {45 min} or “45 minutes” become tap-to-start timers.</small></span>
-            <textarea data-bind="parts.${pi}._steps" rows="${Math.min(14, Math.max(4, (p._steps || '').split('\n').length + 2))}" placeholder="Mix flour and water. Rest {30 min}.&#10;Add salt and yeast; knead until smooth.">${esc(p._steps)}</textarea></label>
+            <textarea data-bind="parts.${pi}._steps" class="${(p.steps || []).some((st) => flagsFor(d, 'step', st.id).length) ? 'flag' : ''}" rows="${Math.min(14, Math.max(4, (p._steps || '').split('\n').length + 2))}" placeholder="Mix flour and water. Rest {30 min}.&#10;Add salt and yeast; knead until smooth.">${esc(p._steps)}</textarea></label>
+          ${(p.steps || []).flatMap((st, si) => flagsFor(d, 'step', st.id).map((f) => flagNote({ ...f, reason: `Step ${si + 1}: ${f.reason}` }))).join('')}
         </fieldset>`).join('')}
         <button type="button" class="btn" data-act="part-add">+ Add section (Dough, Filling, Glaze, Sauce…)</button>
         <datalist id="units">${C.UNIT_CHOICES.map((u) => `<option>${u}</option>`).join('')}</datalist>
@@ -2375,7 +2641,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
           </div>
         </fieldset>
 
-        ${!d._isNew ? `<fieldset class="ed-part ver">
+        ${!d._isNew && !d.draft ? `<fieldset class="ed-part ver">
           <label class="row gap-s"><input type="checkbox" data-bind="_saveVersion" ${d._saveVersion ? 'checked' : ''}> <b>Save as a new version</b> <span class="mono muted">(currently v${esc(d.version)})</span></label>
           <div class="row gap-s wrap"><input data-bind="_vnote" value="${esc(d._vnote || '')}" placeholder="What changed? e.g. hydration 65 → 68%, bake 250 °C" class="grow">
           <label class="small"><input type="checkbox" data-bind="_major" ${d._major ? 'checked' : ''}> major (v${C.nextVersion(d.version, true)})</label></div>
@@ -2404,19 +2670,49 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       for (const p of gone) { await S.store.deletePhoto(r, p.file); if (p.thumb) await S.store.deletePhoto(r, p.thumb); }
     }
     if (isNew) { r.createdAt = C.now(); r.version = r.version || '1.0'; }
+    const wasDraft = !!r.draft;
+    if (r.import) {
+      if (r.import.kind === 'paste') delete r.import;
+      else { r.import = { ...r.import, reviewedAt: C.now() }; delete r.import.flags; delete r.import.needsParse; }
+    }
+    delete r.draft;
     await saveRecipe(r);
     for (const [name, x] of Object.entries(pending)) if ((r.photos || []).some((p) => p.file === name || p.thumb === name)) await S.store.putPhoto(r, name, x.blob);
-    if (isNew || !versionsOf(get(r.id)).length) await addVersion(r, isNew ? 'Original' : 'First snapshot');
+    if (isNew || !versionsOf(get(r.id)).length) await addVersion(r, wasDraft ? `Imported from ${(r.import && r.import.platform) || 'video'}` : isNew ? 'Original' : 'First snapshot');
     else if (saveVer) await addVersion(r, vnote, major);
     S.draft = null; S.dirty = false;
-    toast(saveVer || isNew ? `Saved v${r.version}` : 'Saved');
+    toast(wasDraft ? 'Added to your recipes' : saveVer || isNew ? `Saved v${r.version}` : 'Saved');
     go('#/r/' + r.id);
   }
 
   // ================================================================ IMPORT
+  function videoSection() {
+    const st = S.importStatus && S.importStatus.data, h = st && st.helper;
+    const alive = h && Date.now() - ts(h.seen) < 90e3;
+    const items = ((st && st.items) || []).slice(0, 8);
+    const folder = S.store.kind === 'folder';
+    const lbl = { queued: 'Queued', processing: 'Working', done: 'Done', failed: 'Failed' };
+    return `<section class="video-in" id="video-in">
+      <h2>From a video</h2>
+      ${folder ? `<p class="muted small">YouTube, Instagram, TikTok and more. The Mise video helper on your computer reads the description and captions first, then transcribes the audio, then reads on-screen text — all locally — and drops a draft into “To review”.</p>
+        <div class="row gap-s wrap"><input id="vurl" type="url" class="grow" placeholder="https://www.youtube.com/watch?v=… or a Reel / TikTok link" autocomplete="off">
+          <button class="btn primary" data-act="video-queue">Send to video helper</button></div>
+        <div class="helper ${alive ? 'ok' : ''}">${alive ? `● Helper running on <b>${esc(h.device)}</b> · ${esc(h.transcriber)} · ${esc(h.llm)}` : h ? `○ Helper last seen ${rel(ts(h.seen))} on ${esc(h.device)} — start it to process new links.` : '○ Video helper not set up yet. See <b>README-video.md</b> in the download — about 10 minutes, once.'}</div>
+        ${items.length ? `<ul class="vlist">${items.map((it) => `<li class="${esc(it.status)}">
+          <span class="pill ${it.status === 'failed' ? 'warn' : it.status === 'done' ? '' : 'flag'}">${lbl[it.status] || esc(it.status)}</span>
+          <span class="vl-main"><b>${esc(it.title || it.url)}</b>
+            <small class="muted">${it.status === 'processing' ? esc(it.stage || '') : it.status === 'done' ? `tier ${esc(it.tier)} · ${esc((it.sources || []).join(', '))} · ${esc(it.seconds)} s` : it.status === 'failed' ? esc(it.error || '') : rel(ts(it.added))}</small></span>
+          ${it.status === 'done' && it.recipeId && get(it.recipeId) ? `<a class="btn xs" href="#/${get(it.recipeId).recipe.draft ? 'edit' : 'r'}/${it.recipeId}">${get(it.recipeId).recipe.draft ? 'Review' : 'Open'}</a>` : ''}
+          ${it.status === 'failed' ? `<button class="btn xs" data-act="video-retry" data-url="${esc(it.url)}">Retry</button>` : ''}</li>`).join('')}</ul>` : ''}`
+      : `<p class="muted small">On iPhone, share a video straight to Mise with the <b>“Send to Mise” Shortcut</b> (setup in <b>README-video.md</b>): in YouTube, Instagram or TikTok tap Share → Send to Mise. Your computer’s video helper turns it into a draft; review it there and it reaches this phone with your next sync.</p>
+         <p class="small muted">On a computer with your library folder connected, you can also paste links right here.</p>`}
+    </section>`;
+  }
   function renderImport() {
     $('#view').innerHTML = `
       <section class="import">
+        ${videoSection()}
+        <hr class="stitch">
         <h1>Paste a recipe</h1>
         <p class="muted">Copy everything from a website, note, or video description — title, ingredients, steps, even the ads. Mise pulls out quantities, units, sections, yields and times. You can fix anything before saving.</p>
         <textarea id="paste" rows="14" placeholder="Paste recipe text here…">${esc(S.pasteText || '')}</textarea>
@@ -2434,6 +2730,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   function renderPreview(r) {
     $('#preview').innerHTML = `<div class="preview">
       <div class="row between"><h2>${esc(r.title)}</h2><span class="badge ${r.mode}">${r.mode}</span></div>
+      <p class="small muted">Detected <b>${r.mode === 'baking' ? 'baking — baker’s math' : 'cooking — smart scaling'}</b>${r._modeWhy && r._modeWhy.length ? ` (${r._modeWhy.map(esc).join(', ')})` : ''}. You can switch it in the editor.</p>
       <p class="muted small">Makes ${esc(r.servings)} ${esc(r.servingsLabel)} ${Object.entries(r.times).filter(([, v]) => v).map(([k, v]) => `· ${k} ${esc(v)}`).join(' ')} ${r.equipment.length ? '· ' + r.equipment.map(esc).join(', ') : ''}</p>
       <div class="r-body">
         <div>${r.parts.filter((p) => p.ingredients.length).map((p) => `${p.name ? `<h3>${esc(p.name)}</h3>` : ''}<table class="ptable">${p.ingredients.map((i) => `<tr><td class="mono">${i.qty != null ? esc(C.fmtFrac(i.qty)) + (i.qtyMax ? '–' + esc(C.fmtFrac(i.qtyMax)) : '') : ''}</td><td class="mono">${esc(C.unitLabel(i.unit, i.qty))}</td><td>${esc(i.item)}${i.note ? `<span class="muted">, ${esc(i.note)}</span>` : ''} ${i.fixed ? '<span class="pill">fixed</span>' : ''}${i.flour ? '<span class="pill">flour 100%</span>' : ''}</td></tr>`).join('')}</table>`).join('')}</div>
@@ -2541,6 +2838,12 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
         <div class="card-s">
           <h2>Trash <span class="mono muted">${trash.length}</span></h2>
           ${trash.length ? `<ul class="trash">${trash.map((e) => `<li><span>${esc(e.recipe.title)}</span><span class="row gap-s"><button class="btn xs" data-act="restore" data-id="${e.recipe.id}">Restore</button><button class="btn xs ghost danger" data-act="purge" data-id="${e.recipe.id}">Delete forever</button></span></li>`).join('')}</ul>` : '<p class="muted small">Empty.</p>'}
+        </div>
+
+        <div class="card-s">
+          <h2>Re-check recipes</h2>
+          <p class="small muted">Re-reads saved recipes with the newest parser — fixes step splitting, section titles and Cooking/Baking detection from updates. Your edits, photos, notes and cook logs are kept, and each change is saved as a new version you can restore.</p>
+          <button class="btn sm" data-act="recheck-all">Re-check all recipes…</button>
         </div>
 
         <div class="card-s">
@@ -2847,6 +3150,58 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       S.parsed = C.parseRecipeText(S.pasteText, { preferMetric: $('#prefmetric').checked });
       renderPreview(S.parsed);
     },
+    'video-queue': async () => {
+      const u = ($('#vurl').value || '').trim();
+      if (!/^https?:\/\/\S+$/.test(u)) return toast('Paste a full video link (starting with https://).');
+      await S.store.appendLine('pending-links.txt', u);
+      $('#vurl').value = '';
+      toast(S.importStatus && S.importStatus.data && S.importStatus.data.helper && Date.now() - ts(S.importStatus.data.helper.seen) < 90e3 ? 'Sent — the helper will pick it up in a few seconds.' : 'Queued. It’ll be converted when the video helper is running.', 4500);
+      pollImports(true);
+    },
+    recheck: async (el) => {
+      const r = get(el.dataset.id).recipe;
+      const res = C.recheckRecipe(r, S.flat);
+      if (!res.changed) return modal(`<h2>Already up to date</h2><p class="muted">The latest parser reads “${esc(r.title)}” the same way it’s saved. Nothing to change.</p><div class="m-foot"><button class="btn" data-act="m-close">OK</button></div>`, 'narrow');
+      S.recheckPending = { [r.id]: res.recipe };
+      modal(`<h2>Re-check “${esc(r.title)}”</h2>
+        <ul class="diff">${res.notes.map((n) => `<li>${n}</li>`).join('')}</ul>
+        ${res.recipe.mode !== r.mode ? `<p class="small muted">Why ${esc(res.recipe.mode)}: ${res.why.map(esc).join(', ')}.</p>` : ''}
+        <p class="small muted">Saved as a new version — restore the old one any time from the Lab notebook.</p>
+        <div class="m-foot"><button class="btn ghost" data-act="m-close">Cancel</button><button class="btn primary" data-act="recheck-apply">Apply</button></div>`);
+    },
+    'recheck-all': () => {
+      const list = [...S.recipes.values()].filter((e) => !e.recipe.deleted && !e.recipe.draft).map((e) => ({ r: e.recipe, res: C.recheckRecipe(e.recipe, S.flat) })).filter((x) => x.res.changed);
+      if (!list.length) return modal(`<h2>All up to date</h2><p class="muted">Every recipe already reads the same with the latest parser.</p><div class="m-foot"><button class="btn" data-act="m-close">OK</button></div>`, 'narrow');
+      S.recheckPending = Object.fromEntries(list.map((x) => [x.r.id, x.res.recipe]));
+      modal(`<h2>${list.length} recipe${list.length > 1 ? 's' : ''} would change</h2>
+        <p class="small muted">Untick any you want to leave alone. Each one is saved as a new version you can undo.</p>
+        <ul class="rc-list">${list.map((x) => `<li><label><input type="checkbox" class="rc-pick" value="${x.r.id}" checked> <b>${esc(x.r.title)}</b></label><ul class="diff">${x.res.notes.map((n) => `<li>${n}</li>`).join('')}</ul></li>`).join('')}</ul>
+        <div class="m-foot"><button class="btn ghost" data-act="m-close">Cancel</button><button class="btn primary" data-act="recheck-apply" data-many="1">Apply selected</button></div>`);
+    },
+    'recheck-apply': async (el) => {
+      const ids = el.dataset.many ? $$('.rc-pick:checked').map((c) => c.value) : Object.keys(S.recheckPending || {});
+      const pend = S.recheckPending || {};
+      closeModal();
+      let n = 0;
+      for (const id of ids) {
+        const e = get(id), next = pend[id]; if (!e || !next) continue;
+        const lv = versionsOf(e).find((x) => !x.conflict);
+        if (!lv || C.diffRecipes(lv.snapshot, e.recipe).length) await addVersion(C.clone(e.recipe), 'Before re-check');
+        await addVersion({ ...next, version: get(id).recipe.version }, 'Re-checked with the latest parser');
+        n++;
+      }
+      S.recheckPending = null;
+      toast(`Updated ${n} recipe${n === 1 ? '' : 's'} — previous versions are in each Lab notebook`, 4500);
+      route();
+    },
+    'video-retry': async (el) => { await S.store.appendLine('retry-links.txt', el.dataset.url); toast('Retrying…'); },
+    'flag-ok': (el) => { const im = S.draft && S.draft.import; if (!im) return; im.flags = (im.flags || []).filter((f) => f.id !== el.dataset.f); S.dirty = true; drawEditor(); },
+    'draft-discard': async () => {
+      if (!(await ask('The draft and its thumbnail are deleted. The video link stays in your history.', { title: 'Discard this import?', ok: 'Discard', danger: true }))) return;
+      const e = get(S.draft.id); S.draft = null; S.dirty = false;
+      if (e) { await S.store.purgeRecipe(e.recipe); S.recipes.delete(e.recipe.id); }
+      go('#/');
+    },
     'parse-edit': () => { S.importDraft = S.parsed; S.draft = null; S.pasteText = ''; go('#/new'); },
     'import-files': async () => {
       const files = await pickFiles('.json,application/json');
@@ -2988,6 +3343,26 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   window.addEventListener('beforeunload', (ev) => { if (S.dirty) { ev.preventDefault(); ev.returnValue = ''; } });
   window.addEventListener('focus', () => { if (S.ready && S.store && S.store.kind === 'folder' && Date.now() - (S.lastFocusScan || 0) > 60000 && document.body.dataset.view === 'library') { S.lastFocusScan = Date.now(); reload(); } });
 
+  // ======================================================= VIDEO IMPORT POLL
+  async function pollImports(force) {
+    if (!S.ready || !S.store || S.store.kind !== 'folder' || !S.store.readImportStatus) return;
+    const st = await S.store.readImportStatus();
+    if (!st) return;
+    const changed = !S.importStatus || st.mtime !== S.importStatus.mtime;
+    const prevDone = new Set(((S.importStatus && S.importStatus.data.items) || []).filter((i) => i.status === 'done').map((i) => i.url));
+    S.importStatus = st;
+    if (!changed && !force) return;
+    const fresh = (st.data.items || []).filter((i) => i.status === 'done' && i.recipeId && !get(i.recipeId) && (!prevDone.has(i.url) || force));
+    if (fresh.length) {
+      await loadLibrary();
+      toast(`${fresh.length === 1 ? `“${fresh[0].title}”` : fresh.length + ' recipes'} ready to review`, 5000);
+      route();
+      return;
+    }
+    const v = $('#video-in'); if (v) v.outerHTML = videoSection();
+  }
+  setInterval(() => pollImports(false).catch(() => {}), 6000);
+
   // ================================================================ BOOT
   async function boot() {
     applyTheme();
@@ -3008,6 +3383,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       }
     }
     route();
+    pollImports(false).catch(() => {});
     if ('serviceWorker' in navigator && location.protocol === 'https:' && window.top === window) navigator.serviceWorker.register('sw.js').catch(() => {});
   }
   window.Mise = { S, C, ACT, reload, buildBundle, mergeBundle };
