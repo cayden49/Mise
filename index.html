@@ -237,7 +237,53 @@ textarea.flag { border-color: #e0ad1a; box-shadow: 0 0 0 2px color-mix(in srgb, 
 .rc-list { list-style: none; padding: 0; margin: .5rem 0; max-height: 55vh; overflow: auto; } .rc-list > li { padding: .55rem 0; border-top: 1px dashed var(--line); }
 .rc-list .diff { margin: .2rem 0 0 1.6rem; font-size: .88rem; } .rc-list .diff li { border: 0; padding: .1rem 0; }
 
-/* ---------- photos */
+/* ---------- groceries */
+.nb { display: inline-grid; place-items: center; min-width: 1.15rem; height: 1.15rem; padding: 0 .3rem; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font: 700 .68rem/1 var(--sans); margin-left: .25rem; vertical-align: 1px; }
+.nb[hidden] { display: none; }
+.tabbar a { position: relative; } .tabbar .nb { position: absolute; top: 0; left: calc(50% + 6px); margin: 0; }
+.grocery, .fridge { max-width: 760px; margin: 0 auto; }
+.g-recipes { margin: .3rem 0 1rem; } .g-recipes .chip { cursor: default; } .chip .x { border: 0; background: none; color: var(--muted); cursor: pointer; padding: 0 0 0 .2rem; font-size: .8rem; }
+.g-addrow { margin-bottom: 1rem; } .g-addrow input { font-size: 1rem; padding: .65rem .8rem; }
+.glist { list-style: none; padding: 0; margin: 0; }
+.g-aisle { font: 700 .74rem/1 var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--accent); padding: 1.1rem 0 .4rem; }
+.gi { display: flex; align-items: center; gap: .8rem; padding: .7rem .2rem; border-bottom: 1px dashed var(--line); cursor: pointer; user-select: none; -webkit-user-select: none; font-size: 1.05rem; }
+.gbox { flex: 0 0 1.4rem; height: 1.4rem; border: 2px solid var(--muted); border-radius: 6px; display: grid; place-items: center; }
+.gi.got .gbox { background: var(--good); border-color: var(--good); } .gi.got .gbox::after { content: "✓"; color: #fff; font-weight: 800; font-size: .9rem; }
+.gi.got .g-txt > span { text-decoration: line-through; opacity: .5; }
+.g-txt { display: flex; flex-direction: column; min-width: 0; } .g-txt small { color: var(--muted); font-size: .78rem; }
+.g-staples { margin-top: 1rem; } .g-staples summary { color: var(--muted); padding: .4rem 0; }
+.g-done { margin-top: 1.4rem; color: var(--muted); font-size: .9rem; }
+.m-foot.col { flex-direction: column; align-items: stretch; }
+/* ---------- fridge */
+.big-input { width: 100%; font-size: 1.1rem; padding: .8rem 1rem; border-radius: 12px; margin: .4rem 0 1rem; }
+.fr-list { list-style: none; padding: 0; margin: 0; } .fr-list li { padding: .8rem 0; border-bottom: 1px dashed var(--line); display: flex; flex-direction: column; gap: .3rem; align-items: flex-start; }
+.fr-list a { font-family: var(--serif); font-size: 1.12rem; text-decoration: none; color: var(--ink); }
+.pill.ok { background: color-mix(in srgb, var(--good) 20%, transparent); color: var(--good); text-transform: none; letter-spacing: 0; font-size: .78rem; }
+/* ---------- pans */
+details.pan summary { color: var(--indigo); padding: .2rem 0; } details.pan .row { margin: .5rem 0; } details.pan select { padding: .35rem; font-size: .88rem; max-width: 12rem; } details.pan label { display: flex; flex-direction: column; gap: .2rem; }
+/* ---------- reference drawer */
+.ref-tabs { margin: .6rem 0 1rem; flex-wrap: wrap; } .ref-body { max-height: 64vh; overflow: auto; }
+.rtable { width: 100%; border-collapse: collapse; } .rtable th, .rtable td { text-align: left; padding: .55rem .4rem; border-bottom: 1px dashed var(--line); vertical-align: top; font-size: .93rem; }
+.rtable th { font-weight: 600; width: 42%; } .rtable th small, .rtable td small { display: block; color: var(--muted); font-weight: 400; font-size: .78rem; }
+.nowrap { white-space: nowrap; } .conv label { display: flex; align-items: center; gap: .3rem; }
+/* ---------- cooking tools */
+.cook-tools { display: flex; gap: .4rem; justify-content: center; flex-wrap: wrap; padding: .45rem .6rem; border-top: 1px solid var(--line); background: var(--surface); }
+.cook-tools .btn { font-size: .8rem; } .cook-tools .hf.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.cook-steps.hf-on { position: relative; } .cook-steps.hf-on::after { content: "◀ tap left · tap right ▶"; position: sticky; bottom: .2rem; display: block; text-align: center; font-size: .75rem; color: var(--muted); opacity: .7; pointer-events: none; }
+/* ---------- print */
+#printbook { display: none; }
+@media print {
+  body.printing > *:not(#printbook) { display: none !important; }
+  body.printing #printbook { display: block; }
+  body.printing { background: #fff; color: #000; padding: 0; font: 10.5pt/1.4 Georgia, "Iowan Old Style", serif; }
+  .pr { page-break-after: always; break-after: page; } .pr:last-child { page-break-after: auto; break-after: auto; }
+  .pr h1 { font-size: 20pt; margin: 0 0 .2em; } .pr h3 { font: 700 8.5pt/1.2 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; margin: .9em 0 .3em; color: #000; }
+  .pr-meta { font: 9pt/1.3 system-ui, sans-serif; color: #444; margin: 0 0 .6em; } .pr-desc { font-style: italic; margin: 0 0 .6em; }
+  .pr-cols { display: grid; grid-template-columns: 36% 1fr; gap: 1.4em; } .pr ul { list-style: none; padding: 0; margin: 0; } .pr ul li { padding: .18em 0; border-bottom: .5pt dotted #bbb; }
+  .pr ol { padding-left: 1.3em; margin: 0; } .pr ol li { margin-bottom: .45em; break-inside: avoid; }
+  .pr-notes { margin-top: 1em; border-top: .5pt solid #999; padding-top: .4em; }
+  .pr-cover { page-break-after: always; break-after: page; } .pr-cover h1 { font-size: 30pt; margin-top: 30%; } .pr-cover ol { columns: 2; font-size: 10pt; }
+}
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .8rem; margin: 1rem 0; }
 .gallery figure { margin: 0; } .gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; cursor: zoom-in; background: var(--surface-2); display: block; }
 .gallery figcaption { font-size: .82rem; padding-top: .3rem; }
@@ -393,6 +439,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   <nav class="nav">
     <a href="#/" data-nav="library">Recipes</a>
     <a href="#/import" data-nav="import">Paste</a>
+    <a href="#/grocery" data-nav="grocery">Groceries <span class="nb" hidden></span></a>
     <a href="#/pantry" data-nav="pantry">Pantry</a>
     <a href="#/settings" data-nav="settings">Settings</a>
     <a href="#/new" data-nav="new" class="new">+ New</a>
@@ -407,7 +454,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   <a href="#/" data-nav="library"><svg viewBox="0 0 24 24"><path d="M4 5h6v14H4zM14 5h6v6h-6zM14 15h6v4h-6z"/></svg>Recipes</a>
   <a href="#/import" data-nav="import"><svg viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9 4h6v3H9zM9 12h6M9 16h4"/></svg>Paste</a>
   <a href="#/new" data-nav="new" class="new"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>New</a>
-  <a href="#/pantry" data-nav="pantry"><svg viewBox="0 0 24 24"><path d="M7 3h10l-1 4H8zM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1z"/><path d="M9 12h6"/></svg>Pantry</a>
+  <a href="#/grocery" data-nav="grocery"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>Groceries<span class="nb" hidden></span></a>
   <a href="#/settings" data-nav="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</a>
 </nav>
 <div id="modal"></div>
@@ -649,8 +696,12 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       const v = cups >= 4 ? whole + snap(f, [0, 0.25, 0.5, 0.75, 1]) : whole + near;
       return { text: C.fmtFrac(v, false) + ' ' + unit(v) };
     }
-    const below = FR.filter((v) => v <= f + 1e-9).pop();
-    let tb = Math.round((f - below) * 16);
+    // most accurate "fraction + tablespoons" (¼ cup + 2 tbsp beats ⅓ cup + 1 tbsp for 6 tbsp)
+    let below = 0, tb = 0, bestErr = Infinity;
+    for (const fr of FR.filter((v) => v <= f + 1e-9)) {
+      const lt = Math.round((f - fr) * 16), err = Math.abs(f - fr - lt / 16);
+      if (lt <= 4 && (err < bestErr - 1e-9 || (Math.abs(err - bestErr) < 1e-9 && lt < tb))) { bestErr = err; below = fr; tb = lt; }
+    }
     const v = whole + below;
     if (v === 0) return { text: Math.round(t / 3) + ' tbsp' };
     return { text: `${C.fmtFrac(v, false)} ${unit(v)} + ${tb} tbsp` };
@@ -1243,7 +1294,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
         const txt = `${i.item || ''} ${i.note || ''}`;
         let hit = null;
         for (const [re, why] of VAGUE_ING) { const m = txt.match(re); if (m) { hit = [why, m[0]]; break; } }
-        if (!hit && i.qty == null && !i.fixed && (i.item || '').trim() && !/to taste|optional|garnish|for serving/i.test(txt)) hit = ['No amount given', ''];
+        if (!hit && i.qty == null && !i.fixed && (i.item || '').trim() && !/to taste|optional|garnish|for (serving|finishing|sprinkling|topping|decorat)/i.test(txt)) hit = ['No amount given', ''];
         if (hit) flags.push({ id: C.uid('f'), target: 'ing', ref: i.id, reason: hit[0], phrase: hit[1] });
       }
       for (const st of p.steps || []) {
@@ -1415,6 +1466,202 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   };
 
   root.MiseCore = C;
+  if (typeof module !== 'undefined' && module.exports) module.exports = C;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>/* Mise — kitchen tools: grocery merging, pan sizes, fridge matching, oven ↔ air-fryer. Pure functions. */
+(function (root) {
+  'use strict';
+  const C = root.MiseCore || (typeof require !== 'undefined' ? require('./core.js') : null);
+
+  // ------------------------------------------------------------ names
+  const PREP = /\b(fresh(ly)?|chopped|finely|roughly|coarsely|thinly|diced|minced|sliced|grated|shredded|ground(?= (black|white) pepper)|packed|softened|melted|cold|warm|hot|room[- ]temperature|large|medium|small|extra[- ]large|jumbo|ripe|boneless|skinless|bone[- ]in|skin[- ]on|peeled|seeded|trimmed|rinsed|drained|halved|quartered|cubed|torn|whole|organic|optional|plus more|divided|heaping|level|about|approx(imately)?|good[- ]quality|store[- ]bought|homemade|to taste|for (serving|garnish))\b/g;
+  const singular = (w) => {
+    if (w.length <= 3 || /ss$|us$|is$/.test(w)) return w;
+    if (/ies$/.test(w)) return w.slice(0, -3) + 'y';
+    if (/(tomato|potato|mango|avocado)es$/.test(w)) return w.slice(0, -2);
+    if (/(ch|sh|x|ss)es$/.test(w)) return w.slice(0, -2);
+    if (/leaves$/.test(w)) return w.replace(/leaves$/, 'leaf');
+    if (/s$/.test(w)) return w.slice(0, -1);
+    return w;
+  };
+  /** "2 large Eggs, beaten" → "egg"; "fresh cilantro leaves" → "cilantro leaf" */
+  C.groceryKey = (item) => {
+    let n = C.normName(item).replace(PREP, ' ').replace(/[-–]/g, ' ').replace(/\s+/g, ' ').trim();
+    const w = n.split(' ').filter(Boolean);
+    if (w.length) w[w.length - 1] = singular(w[w.length - 1]);
+    return w.join(' ');
+  };
+  const cleanDisplay = (item) => {
+    const s = String(item || '').replace(/\(.*?\)/g, '').replace(PREP, ' ').replace(/\s+/g, ' ').replace(/^[,\s-]+|[,\s-]+$/g, '').trim();
+    return s || String(item || '');
+  };
+
+  /** "onion" → "onions", "tomato" → "tomatoes", "cherry" → "cherries" (last word only) */
+  const pluralize = (s) => s.replace(/([A-Za-z]+)$/, (w) => (/s$/i.test(w) ? w : /(tomato|potato)$/i.test(w) ? w + 'es' : /[^aeiou]y$/i.test(w) ? w.slice(0, -1) + 'ies' : /(ch|sh|x)$/i.test(w) ? w + 'es' : /leaf$/i.test(w) ? w.slice(0, -1) + 'ves' : w + 's'));
+
+  // ------------------------------------------------------------ aisles
+  C.AISLES = ['Produce', 'Meat & seafood', 'Dairy & eggs', 'Bakery', 'Baking', 'Pasta, rice & grains', 'Canned & jarred', 'Oils, vinegars & sauces', 'Spices', 'Frozen', 'Drinks', 'Other'];
+  const AISLE_RULES = [ // order matters: specific before general
+    ['Frozen', /\bfrozen\b/],
+    ['Spices', /\b(garlic powder|onion powder|chili powder|chilli powder|curry powder|smoked paprika|paprika|cumin|coriander seed|ground (ginger|cinnamon|cloves|nutmeg|coriander)|cinnamon|nutmeg|cardamom|turmeric|cayenne|red pepper flake|chili flake|black pepper|white pepper|peppercorn|bay lea|dried (oregano|thyme|basil|rosemary|parsley|dill)|oregano|italian seasoning|za.?atar|sumac|allspice|star anise|fennel seed|mustard seed|everything bagel|seasoning|salt)\b/],
+    ['Baking', /\b(flour|sugar|baking soda|baking powder|yeast|cornstarch|corn starch|cocoa|chocolate chip|chocolate|vanilla|cream of tartar|molasses|powdered sugar|confectioner|sprinkle|food coloring|gelatin|oat|rolled oat|graham|corn ?meal|semolina|almond flour|honey|maple syrup|agave|corn syrup|sesame seed|chia|flax|shortening|marshmallow|condensed milk|evaporated milk)\b/],
+    ['Oils, vinegars & sauces', /\b(oil|vinegar|soy sauce|tamari|fish sauce|oyster sauce|hoisin|sriracha|hot sauce|ketchup|mustard|mayo|mayonnaise|worcestershire|gochujang|miso|tahini|peanut butter|jam|salsa|bbq sauce|barbecue sauce|teriyaki|chili crisp|sambal|harissa|pesto|dressing|cooking spray)\b/],
+    ['Canned & jarred', /\b(canned|can of|crushed tomato|diced tomato|tomato paste|tomato sauce|coconut milk|coconut cream|broth|stock|bouillon|bean|chickpea|lentil|olive|caper|pickle|artichoke|roasted pepper|pumpkin puree|tuna)\b/],
+    ['Pasta, rice & grains', /\b(pasta|spaghetti|penne|rigatoni|fettuccine|linguine|macaroni|lasagna|orzo|noodle|ramen|udon|soba|rice|quinoa|couscous|farro|barley|bulgur|polenta|breadcrumb|panko|cracker)\b/],
+    ['Meat & seafood', /\b(chicken|beef|steak|pork|bacon|sausage|ham|turkey|lamb|veal|chorizo|prosciutto|pancetta|salami|pepperoni|ground meat|mince|shrimp|prawn|salmon|tuna steak|cod|tilapia|halibut|fish|scallop|crab|lobster|mussel|clam|anchov)\b/],
+    ['Dairy & eggs', /\b(milk|buttermilk|cream|half and half|butter|ghee|cheese|parmesan|parmigiano|pecorino|mozzarella|cheddar|ricotta|feta|goat cheese|gruyere|cream cheese|mascarpone|yogurt|yoghurt|sour cream|creme fraiche|kefir|egg|eggs|yolk)\b/],
+    ['Bakery', /\b(bread|bun|roll|bagel|tortilla|pita|naan|baguette|brioche|croissant|english muffin|pizza dough|pie crust|puff pastry|phyllo|filo)\b/],
+    ['Drinks', /\b(wine|beer|vodka|rum|bourbon|whiskey|tequila|sake|mirin|juice|soda|coffee|espresso|tea)\b/],
+    ['Produce', /\b(onion|garlic|shallot|scallion|green onion|leek|ginger|lemon|lime|orange|apple|pear|banana|berr|strawberr|blueberr|raspberr|grape|mango|pineapple|peach|avocado|tomato|potato|sweet potato|carrot|celery|cucumber|zucchini|squash|pumpkin|eggplant|bell pepper|jalape|serrano|chile|chili pepper|poblano|habanero|mushroom|spinach|kale|lettuce|arugula|cabbage|broccoli|cauliflower|brussels|asparagus|green bean|pea|corn|beet|radish|turnip|fennel|herb|cilantro|parsley|basil|mint|dill|thyme|rosemary|sage|chive|tarragon|lemongrass|bok choy|bean sprout|watermelon|melon|cherr|plum|fig|date|coconut)\b/],
+  ];
+  C.aisleOf = (name) => {
+    const n = ' ' + C.normName(name) + ' ';
+    for (const [a, re] of AISLE_RULES) if (re.test(n)) return a;
+    return 'Other';
+  };
+  const STAPLE = /^(salt|kosher salt|sea salt|fine sea salt|table salt|flaky salt|black pepper|pepper|salt and pepper|salt pepper|water|ice|ice water|warm water|cold water|oil|olive oil|extra virgin olive oil|vegetable oil|canola oil|neutral oil|cooking spray|oil spray|nonstick spray)$/;
+  C.isStaple = (key) => STAPLE.test(key) || /^(water|ice)\b/.test(key);
+
+  // ------------------------------------------------------------ grocery merge
+  /**
+   * entries: [{id, recipeId, recipeTitle, qty, qtyMax, unit, item, note, fixed}] (already scaled)
+   * returns [{key, name, aisle, amount, staple, entries, sources[]}] sorted by aisle then name
+   */
+  C.groceryMerge = (entries, flat, display) => {
+    flat = flat || C.flatDensities(C.defaultPantry());
+    const groups = new Map();
+    for (const e of entries) {
+      if (!e || !(e.item || '').trim()) continue;
+      const key = C.groceryKey(e.item) || C.normName(e.item);
+      if (!groups.has(key)) groups.set(key, { key, name: cleanDisplay(e.item), entries: [] });
+      const g = groups.get(key);
+      g.entries.push(e);
+      if (cleanDisplay(e.item).length < g.name.length) g.name = cleanDisplay(e.item);
+    }
+    const out = [];
+    for (const g of groups.values()) {
+      let gMass = 0, mlVol = 0, anyMass = false, anyVol = false, metricVol = false, volG = 0, volAllDense = true, extra = false, usMass = true;
+      const counts = new Map(); // unit → qty
+      for (const e of g.entries) {
+        if (e.qty == null) { extra = true; continue; }
+        const i = C.unitInfo(e.unit);
+        if (i.t === 'mass') { anyMass = true; gMass += e.qty * i.g; if (!['oz', 'lb'].includes(e.unit)) usMass = false; }
+        else if (i.t === 'vol') {
+          anyVol = true; mlVol += e.qty * i.ml; if (['ml', 'l', 'cl', 'dl'].includes(e.unit)) metricVol = true;
+          const gg = C.toGrams(e, e.qty, flat); if (gg == null) volAllDense = false; else volG += gg;
+        } else {
+          const u = e.unit || '';
+          counts.set(u, (counts.get(u) || 0) + e.qty);
+        }
+      }
+      const parts = [];
+      const fmtMass = (grams) => {
+        // keep pounds when the recipes use pounds
+        if (display === 'us' || (display !== 'metric' && anyMass && usMass && !anyVol)) { const oz = grams / 28.3495; return oz >= 16 ? C.trimNum(Math.ceil(oz / 16 * 4) / 4, 2) + ' lb' : C.fmtFrac(Math.ceil(oz * 4) / 4, false) + ' oz'; }
+        return grams >= 1000 ? C.trimNum(Math.round(grams / 10) / 100, 2) + ' kg' : C.trimNum(C.roundGrams(grams), 1) + ' g';
+      };
+      if (anyMass && anyVol && volAllDense) parts.push(fmtMass(gMass + volG));
+      else {
+        if (anyMass) parts.push(fmtMass(gMass));
+        if (anyVol) parts.push(metricVol || display === 'metric' ? (mlVol >= 1000 ? C.trimNum(Math.round(mlVol / 10) / 100, 2) + ' l' : C.trimNum(C.roundMl(mlVol), 1) + ' ml') : C.formatUSVolume(mlVol).text);
+      }
+      let plural = false;
+      for (const [u, q] of counts) {
+        const r = q >= 10 ? Math.round(q) : Math.round(q * 4) / 4;
+        parts.push(C.fmtFrac(r) + (u ? ' ' + C.unitLabel(u, r) : ''));
+        if (!u && r > 1 && counts.size === 1 && !anyMass && !anyVol) plural = true;
+      }
+      const sources = [...new Set(g.entries.map((e) => e.recipeTitle).filter(Boolean))];
+      const name = plural ? pluralize(g.name) : g.name;
+      out.push({ key: g.key, name, aisle: g.entries[0].aisle || C.aisleOf(g.key), amount: parts.join(' + ') || (extra ? '' : ''), staple: C.isStaple(g.key), entries: g.entries, sources });
+    }
+    const order = (a) => C.AISLES.indexOf(a);
+    return out.sort((a, b) => order(a.aisle) - order(b.aisle) || a.name.localeCompare(b.name));
+  };
+  /** Turn a recipe (at a scale factor) into grocery entries, sub-recipes expanded. */
+  C.groceryEntries = (r, factor, flat, lookup) => C.flatLines(r, flat || C.flatDensities(C.defaultPantry()), lookup, factor).filter((l) => (l.ing.item || '').trim()).map((l) => ({
+    id: C.uid('g'), recipeId: r.id, recipeTitle: r.title, qty: l.qty, qtyMax: l.ing.qtyMax != null && l.qty != null ? (l.ing.fixed ? l.ing.qtyMax : l.ing.qtyMax * (l.qty / (l.ing.qty || 1))) : null,
+    unit: l.ing.unit || '', item: l.ing.item, note: l.ing.note || '', fixed: !!l.ing.fixed, addedAt: C.now(),
+  }));
+  C.groceryText = (merged, checked) => {
+    const lines = [];
+    let aisle = '';
+    for (const g of merged) {
+      if (checked && checked.has(g.key)) continue;
+      if (g.aisle !== aisle) { aisle = g.aisle; lines.push((lines.length ? '\n' : '') + aisle.toUpperCase()); }
+      lines.push(`☐ ${g.amount ? g.amount + ' ' : ''}${g.name}`);
+    }
+    return lines.join('\n');
+  };
+
+  // ------------------------------------------------------------ pans
+  const round = (d) => Math.PI * (d / 2) ** 2;
+  C.PANS = [
+    { id: 'r6', label: '6″ round', area: round(6) }, { id: 'r8', label: '8″ round', area: round(8) }, { id: 'r9', label: '9″ round', area: round(9) },
+    { id: 'r10', label: '10″ round / springform', area: round(10) }, { id: 'r12', label: '12″ round / pizza', area: round(12) },
+    { id: 'pie9', label: '9″ pie plate', area: round(9) },
+    { id: 's8', label: '8×8″ square', area: 64 }, { id: 's9', label: '9×9″ square', area: 81 },
+    { id: 'x711', label: '7×11″', area: 77 }, { id: 'x913', label: '9×13″', area: 117 },
+    { id: 'x1015', label: '10×15″ jelly roll', area: 150 }, { id: 'quarter', label: '9×13″ quarter sheet', area: 117 }, { id: 'half', label: '13×18″ half sheet', area: 234 },
+    { id: 'loaf85', label: '8½×4½″ loaf', area: 38.25 }, { id: 'loaf95', label: '9×5″ loaf', area: 45 },
+    { id: 'sk10', label: '10″ skillet', area: round(10) }, { id: 'sk12', label: '12″ skillet', area: round(12) },
+  ];
+  C.panById = (id) => C.PANS.find((p) => p.id === id);
+  /** Find the pan a recipe mentions ("9x13", "9-inch round", "8-inch square", "loaf pan"). */
+  C.detectPan = (text) => {
+    const t = C.normalizeFractions(String(text || '')).toLowerCase().replace(/″|”|''/g, '"');
+    let m = t.match(/\b(\d{1,2}(?:\.\d+)?)\s*(?:"|-?\s*inch(?:es)?|in\.?)?\s*(?:x|×|by)\s*(\d{1,2}(?:\.\d+)?)(?![\d.])\s*(?:"|-?\s*inch(?:es)?|in\b)?/);
+    if (m && +m[1] >= 4 && +m[2] >= 4) {
+      const a = +m[1], b = +m[2];
+      const hit = C.PANS.find((p) => /^(x|s\d|loaf|half)/.test(p.id) && Math.abs(p.area - a * b) < 0.5);
+      return hit ? hit.id : { custom: true, label: `${a}×${b}″`, area: a * b };
+    }
+    m = t.match(/\b(\d{1,2})\s*(?:"|-?\s*inch(?:es)?)\s*(round|cake pan|springform|pie|skillet|cast[- ]iron|square)/);
+    if (m) {
+      const d = +m[1], kind = m[2];
+      if (kind === 'square') return C.PANS.find((p) => p.id === 's' + d) ? 's' + d : { custom: true, label: `${d}×${d}″`, area: d * d };
+      if (/skillet|cast/.test(kind) && C.panById('sk' + d)) return 'sk' + d;
+      if (kind === 'pie' && d === 9) return 'pie9';
+      return C.panById('r' + d) ? 'r' + d : { custom: true, label: `${d}″ round`, area: round(d) };
+    }
+    if (/\bloaf pan\b/.test(t)) return 'loaf95';
+    if (/\bhalf[- ]sheet\b/.test(t)) return 'half';
+    if (/\bjelly[- ]roll pan\b/.test(t)) return 'x1015';
+    return null;
+  };
+  C.panArea = (p) => (typeof p === 'string' ? (C.panById(p) || {}).area : p && p.area) || 0;
+  C.panLabel = (p) => (typeof p === 'string' ? (C.panById(p) || {}).label : p && p.label) || '';
+  /** Scale factor to fill a different pan at the same depth. */
+  C.panFactor = (from, to) => { const a = C.panArea(from), b = C.panArea(to); return a > 0 && b > 0 ? b / a : null; };
+
+  // ------------------------------------------------------------ fridge
+  /** How well a recipe uses what you have. terms: ['cilantro', 'buttermilk', 'chicken thighs'] */
+  C.fridgeMatch = (r, terms, lookup) => {
+    const keys = terms.map((t) => C.groceryKey(t)).filter(Boolean);
+    const ings = C.flatLines(r, {}, lookup, 1).map((l) => l.ing).filter((i) => (i.item || '').trim());
+    const ingKeys = ings.map((i) => ({ i, k: C.groceryKey(i.item) }));
+    const has = (ik, tk) => { const a = ' ' + ik + ' ', words = tk.split(' '); return words.every((w) => a.includes(' ' + w + ' ') || a.includes(' ' + w + 's ')); };
+    const matched = [], used = new Set();
+    for (const tk of keys) {
+      const hit = ingKeys.find((x) => has(x.k, tk));
+      if (hit) { matched.push(tk); used.add(hit); }
+    }
+    const missing = ingKeys.filter((x) => !used.has(x) && !x.i.fixed && !C.isStaple(x.k) && !keys.some((tk) => has(x.k, tk))).map((x) => cleanDisplay(x.i.item));
+    return { matched, missing: [...new Set(missing)], score: matched.length };
+  };
+
+  // ------------------------------------------------------------ oven conversions
+  /** step 5 for oven dials; step 1 for food-safety temperatures */
+  C.f2c = (f, step = 5) => Math.round(((f - 32) * 5) / 9 / step) * step;
+  C.c2f = (c) => Math.round((c * 9) / 5 + 32);
+  /** Conventional oven → convection / air fryer. Returns {temp, minutes, note}. */
+  C.ovenConvert = (tempF, minutes, to) => {
+    if (to === 'convection') return { temp: tempF - 25, minutes, note: 'Or keep the temperature and check 25% sooner.' };
+    if (to === 'airfryer') return { temp: Math.max(tempF - 25, 250), minutes: minutes != null ? Math.round(minutes * 0.8) : null, note: 'Check halfway; shake or flip. Don’t crowd the basket — cook in batches.' };
+    return { temp: tempF, minutes };
+  };
+
   if (typeof module !== 'undefined' && module.exports) module.exports = C;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
@@ -1777,7 +2024,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   'use strict';
   const C = window.MiseCore, ST = window.MiseStorage;
   const APP_VERSION = '1.1.0';
-  const BUILD = '82c718d70e';
+  const BUILD = '24a77eb3dd';
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -2064,7 +2311,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   function tickTimers() {
     let any = false;
     for (const t of S.timers) {
-      if (t.state === 'run' && Date.now() >= t.endAt) { t.state = 'done'; any = true; notify(t); }
+      if (t.state === 'run' && Date.now() >= t.endAt) { t.state = 'done'; any = true; notify(t); if (S.settings.handsFree && 'speechSynthesis' in window) setTimeout(() => say(`Timer done: ${t.label}`), 900); }
       const el = document.querySelector(`[data-timer="${t.id}"] .t-rem`);
       if (el) el.textContent = t.state === 'done' || t.state === 'ack' ? 'Done' : C.fmtDuration(Math.ceil(remaining(t)));
       const bar = document.querySelector(`[data-timer="${t.id}"] .t-bar i`);
@@ -2126,6 +2373,8 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     if (view === 'new') return renderEditor(null);
     if (view === 'import') return renderImport();
     if (view === 'pantry') return renderPantry();
+    if (view === 'grocery') return renderGrocery();
+    if (view === 'fridge') return renderFridge();
     if (view === 'settings') return renderSettings();
     return renderLibrary();
   }
@@ -2192,6 +2441,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
           <div class="row gap"><button class="btn primary sm" data-act="pick-folder">Choose library folder…</button><button class="btn sm ghost" data-act="stay-local">Keep on this device</button></div></div>` : ''}
         <div class="lib-head">
           <h1>Recipes <span class="count mono">${total}</span></h1>
+          <a class="btn sm" href="#/fridge" title="Find recipes that use ingredients you already have">Use what I have</a>
           <div class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
             <input id="q" type="search" placeholder="Search recipes, ingredients, notes…" title="Searches titles, ingredients, steps and notes. Prefix a word with - to exclude it. Press / to focus." value="${esc(L.q)}" data-in="lib-q" autocomplete="off"></div>
         </div>
@@ -2204,6 +2454,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
           <select data-in="lib-sel" data-key="sort" class="chip">
             ${[['updated', 'Recently edited'], ['cooked', 'Recently cooked'], ['most', 'Most cooked'], ['rating', 'Top rated'], ['title', 'A → Z'], ['created', 'Newest']].map(([v, l]) => `<option value="${v}" ${L.sort === v ? 'selected' : ''}>Sort: ${l}</option>`).join('')}</select>
           ${L.q || L.mode !== 'all' || L.equip.length || L.tags.length || +L.rating || L.cooked !== 'any' ? `<button class="chip clear" data-act="lib-clear">Clear</button>` : ''}
+          ${total ? `<button class="chip ghost" data-act="print-list" title="Print every recipe in this list, one per page (or save as a PDF cookbook)">Print these</button>` : ''}
         </div>
         ${reviewStrip()}
         <div class="grid" id="grid"></div>
@@ -2326,7 +2577,24 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
         <button class="btn sm" data-act="solve">Solve</button>
       </div>` : ''}
       <div class="seg sm units">${[['orig', 'As written'], ['metric', 'Metric'], ['us', 'US cups']].map(([v, l]) => `<button class="${s.units === v ? 'on' : ''}" data-act="units" data-v="${v}">${l}</button>`).join('')}</div>
+      ${panRow(r, s)}
+      <button class="btn sm" data-act="g-add-recipe" data-id="${r.id}">🛒 Add to grocery list${Math.abs(s.factor - 1) > 1e-6 ? ` (×${C.trimNum(s.factor, 2)})` : ''}</button>
     </div>`;
+  }
+  const recipePan = (r) => r.pan || C.detectPan([r.title, r.description, r.notes, (r.equipment || []).join(' '), ...C.allSteps(r).map((x) => x.text)].join(' \n '));
+  function panRow(r, s) {
+    const det = recipePan(r);
+    if (s.panFrom === undefined) s.panFrom = det && typeof det === 'object' ? 'detected' : det || '';
+    const fromObj = s.panFrom === 'detected' ? det : s.panFrom;
+    const opt = (sel) => C.PANS.map((p) => `<option value="${p.id}" ${sel === p.id ? 'selected' : ''}>${esc(p.label)}</option>`).join('');
+    const f = s.panTo && fromObj ? C.panFactor(fromObj, s.panTo === 'custom' ? s.panToCustom : s.panTo) : null;
+    return `<details class="pan" ${s.panTo ? 'open' : ''}><summary class="small">Using a different pan?${det ? ` <span class="muted">Recipe uses ${esc(C.panLabel(det))}</span>` : ''}</summary>
+      <div class="row wrap gap-s">
+        <label class="small">Recipe’s pan <select data-in="pan-from"><option value="">choose…</option>${det && typeof det === 'object' ? `<option value="detected" ${s.panFrom === 'detected' ? 'selected' : ''}>${esc(det.label)}</option>` : ''}${opt(s.panFrom)}</select></label>
+        <label class="small">Your pan <select data-in="pan-to"><option value="">choose…</option>${opt(s.panTo)}<option value="custom" ${s.panTo === 'custom' ? 'selected' : ''}>${s.panTo === 'custom' && s.panToCustom ? esc(s.panToCustom.label) : 'Other size…'}</option></select></label>
+      </div>
+      ${f ? `<p class="small">Scaled <b class="mono">×${C.trimNum(f, 2)}</b> to fill your pan at the same depth. Bake time should be close — start checking a few minutes early.</p>` : s.panTo && !fromObj ? '<p class="small muted">Pick the recipe’s pan too.</p>' : ''}
+    </details>`;
   }
   function bakersPanel(r, factor) {
     const bm = C.bakersMath(r, S.flat, lookup, factor);
@@ -2383,6 +2651,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
                 <button data-act="duplicate" data-id="${r.id}">Duplicate</button>
                 <button data-act="export-one" data-id="${r.id}">Share / export file</button>
                 <button data-act="print">Print</button>
+                <button data-act="ref">📖 Swaps &amp; temperatures</button>
                 <button data-act="wake" class="wake-item"><span>☀ Keep screen awake</span><span class="wake-state"></span></button>
                 <button data-act="delete" data-id="${r.id}" class="danger">Move to trash</button>
                 <button data-act="dd-close" class="dd-cancel">Cancel</button>
@@ -2500,10 +2769,15 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
             ${(r.parts || []).filter((p) => (p.ingredients || []).length).map((p) => `${p.name ? `<h3>${esc(p.name)}</h3>` : ''}<ul class="ings big">${p.ingredients.map((i) => ingLine(i, s.factor, s.units, { cook: true, checked })).join('')}</ul>`).join('')}
             <button class="btn ghost sm" data-act="cook-reset">Reset checklist</button>
           </section>
-          <section class="cook-steps">
+          <section class="cook-steps ${S.settings.handsFree ? 'hf-on' : ''}">
             <ol class="steps big">${steps.map((st2, i) => `${st2.part && (i === 0 || steps[i - 1].part !== st2.part) ? `<li class="step-part">${esc(st2.part)}${st2.sub ? ` <span class="pill mono">${st2.sub}</span>` : ''}</li>` : ''}<li class="${i === cs.step ? 'active' : i < cs.step ? 'done' : ''}" data-act="cook-step" data-i="${i}">
               <span class="num mono">${i + 1}</span><div>${stepHTML(st2.text, st2.part || r.title)}</div></li>`).join('') || '<li>No steps.</li>'}</ol>
           </section>
+        </div>
+        <div class="cook-tools">
+          <button class="btn xs" data-act="speak">🔊 Read aloud</button>
+          <button class="btn xs hf ${S.settings.handsFree ? 'on' : ''}" data-act="hands-free">✋ Hands-free: <b>${S.settings.handsFree ? 'On' : 'Off'}</b></button>
+          <button class="btn xs" data-act="ref">📖 Swaps &amp; temps</button>
         </div>
         <footer class="cook-nav">
           <button class="btn big" data-act="cook-prev" ${cs.step <= 0 ? 'disabled' : ''}>◀ Prev</button>
@@ -2523,7 +2797,35 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     $('.cook-nav span').textContent = `Step ${c.cs.step + 1} of ${c.steps}`;
     $('[data-act=cook-prev]').disabled = c.cs.step <= 0; $('[data-act=cook-next]').disabled = c.cs.step >= c.steps - 1;
     const t = $('[data-v=steps] .mono'); if (t) t.textContent = `${c.cs.step + 1}/${c.steps}`;
+    if (S.settings.handsFree) speakStep();
   }
+  // ----- hands-free: read aloud, swipe, big tap zones
+  const sayable = (t) => String(t || '').replace(/[⏱☀✋🔊📖🛒]/gu, '').replace(/\s{2,}/g, ' ').replace(/\{([^}]+)\}/g, '$1').replace(/(\d)\s*°\s*F\b/g, '$1 degrees').replace(/(\d)\s*°\s*C\b/g, '$1 degrees Celsius')
+    .replace(/(\d)\s*[-–]\s*(\d)/g, '$1 to $2').replace(/\bmins?\b/g, 'minutes').replace(/\bhrs?\b|\b(\d+) h\b/g, (m, n) => (n ? n + ' hours' : 'hours')).replace(/\btbsp\b/g, 'tablespoons').replace(/\btsp\b/g, 'teaspoons').replace(/\boz\b/g, 'ounces').replace(/\blb\b/g, 'pounds').replace(/(\d) ?g\b/g, '$1 grams');
+  function say(text) {
+    if (!('speechSynthesis' in window)) { toast('This browser can’t read aloud.'); return; }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(sayable(text)); u.rate = 0.98; u.lang = navigator.language || 'en-US';
+    speechSynthesis.speak(u);
+  }
+  function speakStep() {
+    const li = $('.cook-steps li.active'); if (!li) return;
+    const n = S.cook ? S.cook.cs.step + 1 : '';
+    say(`Step ${n}. ${li.querySelector('div').innerText}`);
+  }
+  function speakIngredients() {
+    const items = $$('.cook-ing .ings > .ing:not(.struck)').map((li) => `${li.querySelector('.amt').innerText} ${li.querySelector('.what').innerText.split('\n')[0]}`.trim());
+    say(items.length ? 'Ingredients. ' + items.join('. ') : 'Everything is checked off.');
+  }
+  (() => { // swipe left/right between steps in cooking mode
+    let x0 = null, y0 = 0;
+    document.addEventListener('touchstart', (e) => { if (document.body.dataset.view !== 'cook' || !e.target.closest('.cook-body')) return; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      if (x0 == null || !S.cook) return;
+      const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+      if (Math.abs(dx) > 60 && Math.abs(dy) < 50) { if (S.cookPane === 'ing') { S.cookPane = 'steps'; renderCook(S.cook.id); return; } cookGoto(S.cook.cs.step + (dx < 0 ? 1 : -1)); }
+    }, { passive: true });
+  })();
 
   // ================================================================ EDITOR
   const qtyToText = (q, unit) => q == null ? '' : ['g', 'ml', 'kg', 'l', 'mg'].includes(unit) ? C.trimNum(q, 3) : C.fmtFrac(q).replace(/(\d)([½⅓⅔¼¾⅛⅜⅝⅞])/, '$1 $2');
@@ -2577,7 +2879,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       if (base.draft && base.import && base.import.needsParse) {
         // helper ran without the local AI: parse its raw text with Mise's own parser
         const pr = C.parseRecipeText(base.import.text.replace(/^[A-Z][A-Z -]+(\(.*\))?:\s*$/gm, ''));
-        src = { ...C.clone(base), parts: pr.parts, mode: pr.mode, servings: pr.servings, servingsLabel: pr.servingsLabel, times: pr.times,
+        src = { ...C.clone(base), parts: pr.parts, mode: pr.mode, servings: pr.servings, servingsLabel: pr.servingsLabel, times: pr.times, description: base.description || pr.description,
           equipment: [...new Set([...(base.equipment || []), ...pr.equipment])], notes: [base.notes, pr.notes].filter(Boolean).join('\n'),
           import: { ...base.import, needsParse: false, flags: C.flagVague(pr) } };
       }
@@ -2626,6 +2928,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
           <datalist id="yieldlabels"><option>servings</option><option>dough balls</option><option>loaves</option><option>pizzas</option><option>cookies</option><option>rolls</option><option>cups</option><option>batch</option></datalist>
           <div class="f"><span>Times</span><div class="row gap-s">${['prep', 'cook', 'total'].map((k) => `<input data-bind="times.${k}" value="${esc((d.times || {})[k] || '')}" placeholder="${k}" class="n6">`).join('')}</div></div>
           ${baking ? `<label class="f"><span>Levain hydration %</span><input type="number" data-bind="levainHydration" value="${esc(d.levainHydration || 100)}" class="n4"></label>` : ''}
+          <label class="f"><span>Pan</span><select data-bind="pan"><option value="">${(() => { const dp = C.detectPan([d.title, d.notes, ...(d.parts || []).map((p) => p._steps || '')].join(' ')); return dp ? 'Auto: ' + esc(C.panLabel(dp)) : 'Not set'; })()}</option>${C.PANS.map((p) => `<option value="${p.id}" ${d.pan === p.id ? 'selected' : ''}>${esc(p.label)}</option>`).join('')}</select></label>
           <label class="f"><span>Tags</span><input data-bind="_tags" value="${esc(d._tags)}" placeholder="weeknight, pizza, family" list="taglist"></label>
           <datalist id="taglist">${allTags().map((t) => `<option>${esc(t)}</option>`).join('')}</datalist>
           <label class="f"><span>Source</span><input data-bind="source" value="${esc(d.source)}" placeholder="URL, book, person"></label>
@@ -2740,18 +3043,18 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     const folder = S.store.kind === 'folder';
     const lbl = { queued: 'Queued', processing: 'Working', done: 'Done', failed: 'Failed' };
     return `<section class="video-in" id="video-in">
-      <h2>From a video</h2>
-      ${folder ? `<p class="muted small">YouTube, Instagram, TikTok and more. The Mise video helper on your computer reads the description and captions first, then transcribes the audio, then reads on-screen text — all locally — and drops a draft into “To review”.</p>
-        <div class="row gap-s wrap"><input id="vurl" type="url" class="grow" placeholder="https://www.youtube.com/watch?v=… or a Reel / TikTok link" autocomplete="off">
-          <button class="btn primary" data-act="video-queue">Send to video helper</button></div>
+      <h2>From a link</h2>
+      ${folder ? `<p class="muted small">Recipe websites, YouTube, Instagram, TikTok and more. The Mise helper on your computer reads the recipe card on a website (skipping the life story and ads), or a video’s description and captions, then its audio, then on-screen text — all locally — and drops a draft into “To review”.</p>
+        <div class="row gap-s wrap"><input id="vurl" type="url" class="grow" placeholder="Recipe website, YouTube, Reel or TikTok link" autocomplete="off">
+          <button class="btn primary" data-act="video-queue">Send to helper</button></div>
         <div class="helper ${alive ? 'ok' : ''}">${alive ? `● Helper running on <b>${esc(h.device)}</b> · ${esc(h.transcriber)} · ${esc(h.llm)}` : h ? `○ Helper last seen ${rel(ts(h.seen))} on ${esc(h.device)} — start it to process new links.` : '○ Video helper not set up yet. See <b>README-video.md</b> in the download — about 10 minutes, once.'}</div>
         ${items.length ? `<ul class="vlist">${items.map((it) => `<li class="${esc(it.status)}">
           <span class="pill ${it.status === 'failed' ? 'warn' : it.status === 'done' ? '' : 'flag'}">${lbl[it.status] || esc(it.status)}</span>
           <span class="vl-main"><b>${esc(it.title || it.url)}</b>
-            <small class="muted">${it.status === 'processing' ? esc(it.stage || '') : it.status === 'done' ? `tier ${esc(it.tier)} · ${esc((it.sources || []).join(', '))} · ${esc(it.seconds)} s` : it.status === 'failed' ? esc(it.error || '') : rel(ts(it.added))}</small></span>
+            <small class="muted">${it.status === 'processing' ? esc(it.stage || '') : it.status === 'done' ? `${it.tier === 'web' ? 'website' : 'tier ' + esc(it.tier)} · ${esc((it.sources || []).join(', '))} · ${esc(it.seconds)} s` : it.status === 'failed' ? esc(it.error || '') : rel(ts(it.added))}</small></span>
           ${it.status === 'done' && it.recipeId && get(it.recipeId) ? `<a class="btn xs" href="#/${get(it.recipeId).recipe.draft ? 'edit' : 'r'}/${it.recipeId}">${get(it.recipeId).recipe.draft ? 'Review' : 'Open'}</a>` : ''}
           ${it.status === 'failed' ? `<button class="btn xs" data-act="video-retry" data-url="${esc(it.url)}">Retry</button>` : ''}</li>`).join('')}</ul>` : ''}`
-      : `<p class="muted small">On iPhone, share a video straight to Mise with the <b>“Send to Mise” Shortcut</b> (setup in <b>README-video.md</b>): in YouTube, Instagram or TikTok tap Share → Send to Mise. Your computer’s video helper turns it into a draft; review it there and it reaches this phone with your next sync.</p>
+      : `<p class="muted small">On iPhone, share a recipe website or video straight to Mise with the <b>“Send to Mise” Shortcut</b> (setup in <b>README-video.md</b>): in Safari, YouTube, Instagram or TikTok tap Share → Send to Mise. Your computer’s video helper turns it into a draft; review it there and it reaches this phone with your next sync.</p>
          <p class="small muted">On a computer with your library folder connected, you can also paste links right here.</p>`}
     </section>`;
   }
@@ -2885,6 +3188,12 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
         <div class="card-s">
           <h2>Trash <span class="mono muted">${trash.length}</span></h2>
           ${trash.length ? `<ul class="trash">${trash.map((e) => `<li><span>${esc(e.recipe.title)}</span><span class="row gap-s"><button class="btn xs" data-act="restore" data-id="${e.recipe.id}">Restore</button><button class="btn xs ghost danger" data-act="purge" data-id="${e.recipe.id}">Delete forever</button></span></li>`).join('')}</ul>` : '<p class="muted small">Empty.</p>'}
+        </div>
+
+        <div class="card-s">
+          <h2>Pantry densities</h2>
+          <p class="small muted">Grams per cup for your own flour, sugar and salt — makes every cup ↔ gram conversion match your bags.</p>
+          <a class="btn sm" href="#/pantry">Open pantry</a>
         </div>
 
         <div class="card-s">
@@ -3130,7 +3439,8 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       const b = await buildBundle({ ids: [r.id], photos: 'all' });
       await shareOrDownload(`${C.slug(r.title)}.mise.json`, JSON.stringify(b));
     },
-    print: () => { try { window.print(); } catch (e) { toast('Printing isn’t available here.'); } },
+    print: () => { const r = get(cur()).recipe; printRecipes([r], true); },
+    'print-list': () => { const list = filtered().map((x) => x.e.recipe); if (!list.length) return toast('No recipes in this list.'); printRecipes(list, false); },
     delete: async (el) => {
       const r = C.clone(get(el.dataset.id).recipe);
       if (!(await ask('You can restore it from Settings › Trash.', { title: `Move “${r.title}” to the trash?`, ok: 'Move to trash', danger: true }))) return;
@@ -3163,7 +3473,22 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       el.classList.toggle('struck', set.has(k));
       const n = $('#ingcount'); if (n) n.textContent = `${set.size}/${$$('.cook-ing .ing').length}`;
     },
-    'cook-step': (el, ev) => { if (ev.target.closest('.tchip')) return; cookGoto(+el.dataset.i); },
+    'cook-step': (el, ev) => {
+      if (ev.target.closest('.tchip')) return;
+      if (S.settings.handsFree) { const x = ev.clientX / window.innerWidth; return cookGoto(S.cook.cs.step + (x < 0.35 ? -1 : 1)); } // big tap zones
+      cookGoto(+el.dataset.i);
+    },
+    speak: () => (S.cookPane === 'ing' && window.innerWidth <= 820 ? speakIngredients() : speakStep()),
+    'hands-free': () => {
+      S.settings.handsFree = !S.settings.handsFree; saveSettings();
+      const b = $('[data-act=hands-free]'); if (b) { b.classList.toggle('on', S.settings.handsFree); b.querySelector('b').textContent = S.settings.handsFree ? 'On' : 'Off'; }
+      const cs2 = $('.cook-steps'); if (cs2) cs2.classList.toggle('hf-on', S.settings.handsFree);
+      if (S.settings.handsFree) { toast('Hands-free on: each step is read aloud. Swipe, or tap the right side for next and the left side to go back.', 6000); speakStep(); }
+      else { if ('speechSynthesis' in window) speechSynthesis.cancel(); toast('Hands-free off'); }
+    },
+    ref: () => openRef(S.refTab || 'swaps'),
+    'ref-tab': (el) => openRef(el.dataset.v),
+    'ref-convert': () => refConvert(),
     'cook-next': () => cookGoto(S.cook.cs.step + 1),
     'cook-prev': () => cookGoto(S.cook.cs.step - 1),
     'cook-reset': () => { S.cook.cs.checked = []; S.cook.cs.save(); $$('.cook-ing .struck').forEach((x) => x.classList.remove('struck')); const n = $('#ingcount'); if (n) n.textContent = `0/${$$('.cook-ing .ing').length}`; },
@@ -3219,6 +3544,10 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     parse: () => {
       S.pasteText = $('#paste').value;
       if (!S.pasteText.trim()) return toast('Paste some recipe text first.');
+      if (/^\s*https?:\/\/\S+\s*$/.test(S.pasteText)) {
+        if (S.store.kind === 'folder') { $('#vurl').value = S.pasteText.trim(); $('#paste').value = ''; S.pasteText = ''; $('#video-in').scrollIntoView({ behavior: 'smooth' }); return toast('That’s a link — tap “Send to helper” to import it.', 5000); }
+        return toast('That’s a link. Open the page, copy the recipe text, and paste that here — or send the link with the “Send to Mise” Shortcut.', 7000);
+      }
       S.parsed = C.parseRecipeText(S.pasteText, { preferMetric: $('#prefmetric').checked });
       renderPreview(S.parsed);
     },
@@ -3389,6 +3718,21 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     else if (k === 'lib-sel') { S.lib[el.dataset.key] = el.dataset.key === 'rating' ? +el.value : el.value; LS.set('lib', S.lib); renderLibrary(); }
     else if (k === 'lib-multi') { const key = el.dataset.key; S.lib[key] = el.checked ? [...new Set([...S.lib[key], el.value])] : S.lib[key].filter((x) => x !== el.value); LS.set('lib', S.lib); const d = el.closest('details'); renderLibrary(); const nd = $(`details[data-dd="${key}"]`); if (nd && d) nd.open = true; }
     else if (k === 'servings' && ev.type === 'change') { const r = get(cur()).recipe; const v = +el.value; if (v > 0) { scaleOf(r).factor = v / (+r.servings || 1); renderRecipe(r.id, 'recipe'); } }
+    else if (k === 'pan-from' && ev.type === 'change') { const r = get(cur()).recipe, s2 = scaleOf(r); s2.panFrom = el.value; if (s2.panTo) applyPan(r, s2); renderRecipe(r.id, 'recipe'); }
+    else if (k === 'pan-to' && ev.type === 'change') {
+      const r = get(cur()).recipe, s2 = scaleOf(r);
+      if (el.value === 'custom') {
+        askFields('Your pan size', [{ label: 'Round: diameter in inches (e.g. 10) — or rectangle: width × length (e.g. 11x7)', placeholder: '10  or  11x7' }], 'Use this pan').then((a) => {
+          const v = a && a[0].trim(); if (!v) return renderRecipe(r.id, 'recipe');
+          const m = v.match(/^(\d+(?:\.\d+)?)\s*[x×*by ]+\s*(\d+(?:\.\d+)?)$/i), d1 = parseFloat(v);
+          s2.panToCustom = m ? { custom: true, label: `${m[1]}×${m[2]}″`, area: m[1] * m[2] } : d1 > 0 ? { custom: true, label: `${d1}″ round`, area: Math.PI * (d1 / 2) ** 2 } : null;
+          s2.panTo = s2.panToCustom ? 'custom' : ''; applyPan(r, s2); renderRecipe(r.id, 'recipe');
+        });
+        return;
+      }
+      s2.panTo = el.value; applyPan(r, s2); renderRecipe(r.id, 'recipe');
+    }
+    else if (k === 'fridge') { S.fridge = el.value; LS.set('fridge', el.value); renderFridgeResults(); }
     else if (k === 'dough') { const r = get(cur()).recipe; scaleOf(r).dough[el.dataset.k] = el.dataset.k === 'by' ? el.value : +el.value; }
     else if (k === 'setting') { const key = el.dataset.k; S.settings[key] = el.type === 'checkbox' ? el.checked : el.type === 'range' ? +el.value : el.value; saveSettings(); if (key === 'wake') Wake.set(false); }
     else if (k === 'device-name') { S.settings.device.name = el.value.trim() || 'This device'; saveSettings(); }
@@ -3410,6 +3754,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     }
     if (document.body.dataset.view === 'library' && ev.key === '/' && !/INPUT|TEXTAREA/.test(ev.target.tagName)) { ev.preventDefault(); const q = $('#q'); if (q) q.focus(); }
     if ((ev.metaKey || ev.ctrlKey) && ev.key === 's' && S.draft) { ev.preventDefault(); saveDraft(); }
+    if (ev.key === 'Enter' && ev.target.id === 'g-new') { ev.preventDefault(); ACT['g-add'](); return; }
     if (ev.key === 'Enter' && S.draft && ev.target.closest('.ing-row') && ev.target.tagName === 'INPUT') {
       ev.preventDefault(); onInput({ target: ev.target, type: 'change' });
       const fs = ev.target.closest('.ed-part'), pi = $$('.ed-part').indexOf(fs);
@@ -3419,6 +3764,206 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   });
   window.addEventListener('beforeunload', (ev) => { if (S.dirty) { ev.preventDefault(); ev.returnValue = ''; } });
   window.addEventListener('focus', () => { if (S.ready && S.store && S.store.kind === 'folder' && Date.now() - (S.lastFocusScan || 0) > 60000 && document.body.dataset.view === 'library') { S.lastFocusScan = Date.now(); reload(); } });
+
+  // ============================================================== PANS
+  function applyPan(r, s2) {
+    const from = s2.panFrom === 'detected' ? recipePan(r) : s2.panFrom;
+    const to = s2.panTo === 'custom' ? s2.panToCustom : s2.panTo;
+    const f = from && to ? C.panFactor(from, to) : null;
+    if (f) { s2.factor = f; s2.yieldOverride = null; }
+  }
+
+  // =========================================================== GROCERIES
+  const GL = {
+    get: () => { const g = LS.get('grocery', null) || {}; return { entries: g.entries || [], checked: g.checked || [] }; },
+    set: (g) => { LS.set('grocery', g); updateBadges(); },
+  };
+  const gDisplay = () => (S.settings.units === 'us' ? 'us' : S.settings.units === 'metric' ? 'metric' : '');
+  function updateBadges() {
+    const g = GL.get(), chk = new Set(g.checked);
+    const n = C.groceryMerge(g.entries, S.flat, gDisplay()).filter((x) => !x.staple && !chk.has(x.key)).length;
+    $$('[data-nav=grocery] .nb').forEach((el) => { el.textContent = n || ''; el.hidden = !n; });
+  }
+  function renderGrocery() {
+    const g = GL.get(), chk = new Set(g.checked);
+    const merged = C.groceryMerge(g.entries, S.flat, gDisplay());
+    const recipes = [...new Map(g.entries.filter((e) => e.recipeId).map((e) => [e.recipeId, e])).values()];
+    const todo = merged.filter((x) => !x.staple && !chk.has(x.key)), got = merged.filter((x) => !x.staple && chk.has(x.key)), staples = merged.filter((x) => x.staple);
+    const item = (x) => `<li class="gi ${chk.has(x.key) ? 'got' : ''}" data-act="g-toggle" data-k="${esc(x.key)}"><span class="gbox" aria-hidden="true"></span>
+      <span class="g-txt"><span><b class="mono">${esc(x.amount)}</b> ${esc(x.name)}</span>${x.sources.length ? `<small>${x.sources.map(esc).join(' · ')}</small>` : ''}</span></li>`;
+    let aisle = '';
+    $('#view').innerHTML = `
+      <section class="grocery">
+        <div class="row between wrap gap-s"><h1>Groceries</h1>
+          <div class="row gap-s">${merged.length ? `<button class="btn sm primary" data-act="g-share">Share list</button><button class="btn sm ghost" data-act="g-clear">Clear…</button>` : ''}</div></div>
+        ${recipes.length ? `<div class="chips g-recipes">${recipes.map((e) => `<span class="chip">${esc(e.recipeTitle)}${e.scale && Math.abs(e.scale - 1) > 1e-6 ? ` <span class="mono muted">×${C.trimNum(e.scale, 2)}</span>` : ''} <button class="x" data-act="g-remove-recipe" data-id="${e.recipeId}" aria-label="Remove ${esc(e.recipeTitle)}">✕</button></span>`).join('')}</div>` : ''}
+        <div class="row gap-s g-addrow"><input id="g-new" class="grow" placeholder="Add an item — e.g. 2 lemons, paper towels" autocomplete="off"><button class="btn" data-act="g-add">Add</button></div>
+        ${!merged.length ? `<div class="empty small"><p>Your list is empty. On any recipe, tap <b>🛒 Add to grocery list</b> — amounts follow the scale you picked, and the same ingredient from different recipes is combined (2 cloves + 4 cloves garlic = 6 cloves).</p></div>` : ''}
+        <ul class="glist">${todo.map((x) => (x.aisle !== aisle ? `${(aisle = x.aisle) && ''}<li class="g-aisle">${esc(x.aisle)}</li>` : '') + item(x)).join('')}</ul>
+        ${staples.length ? `<details class="g-staples"><summary class="small">Probably in your pantry (${staples.length})</summary><ul class="glist">${staples.map(item).join('')}</ul></details>` : ''}
+        ${got.length ? `<h3 class="g-done">In the cart (${got.length})</h3><ul class="glist">${got.map(item).join('')}</ul>` : ''}
+      </section>`;
+  }
+  function addRecipeToGrocery(r, factor, only) {
+    const g = GL.get();
+    const had = g.entries.some((e) => e.recipeId === r.id);
+    let add = C.groceryEntries(r, factor, S.flat, lookup).map((e) => ({ ...e, scale: factor }));
+    if (only) add = add.filter(only);
+    g.entries = g.entries.filter((e) => e.recipeId !== r.id).concat(add);
+    GL.set(g);
+    return { had, n: add.length };
+  }
+  Object.assign(ACT, {
+    'g-add-recipe': (el) => {
+      const r = get(el.dataset.id).recipe, s2 = scaleOf(r);
+      const { had, n } = addRecipeToGrocery(r, s2.factor);
+      toast(had ? `Updated “${r.title}” on your grocery list` : `Added ${n} item${n === 1 ? '' : 's'} to your grocery list`, 3500);
+    },
+    'g-toggle': (el) => { const g = GL.get(), k = el.dataset.k; g.checked = g.checked.includes(k) ? g.checked.filter((x) => x !== k) : [...g.checked, k]; GL.set(g); renderGrocery(); },
+    'g-add': () => {
+      const v = ($('#g-new').value || '').trim(); if (!v) return;
+      const i = C.parseIngredientLine(v); const g = GL.get();
+      g.entries.push({ id: C.uid('g'), recipeId: '', recipeTitle: '', qty: i.qty, qtyMax: i.qtyMax, unit: i.unit, item: i.item, note: i.note, addedAt: C.now() });
+      GL.set(g); renderGrocery(); const n = $('#g-new'); if (n) n.focus();
+    },
+    'g-remove-recipe': (el) => { const g = GL.get(); g.entries = g.entries.filter((e) => e.recipeId !== el.dataset.id); GL.set(g); renderGrocery(); },
+    'g-clear': async () => {
+      const g = GL.get();
+      modal(`<h2>Clear the list?</h2><div class="m-foot col"><button class="btn" data-act="g-clear-got" ${g.checked.length ? '' : 'disabled'}>Remove checked items</button><button class="btn danger" data-act="g-clear-all">Clear everything</button><button class="btn ghost" data-act="m-close">Cancel</button></div>`, 'narrow');
+    },
+    'g-clear-got': () => {
+      const g = GL.get(), chk = new Set(g.checked);
+      g.entries = g.entries.filter((e) => !chk.has(C.groceryKey(e.item) || C.normName(e.item))); g.checked = []; GL.set(g); closeModal(); renderGrocery();
+    },
+    'g-clear-all': () => { GL.set({ entries: [], checked: [] }); closeModal(); renderGrocery(); },
+    'g-share': async () => {
+      const g = GL.get(), chk = new Set(g.checked);
+      const text = 'Groceries\n\n' + C.groceryText(C.groceryMerge(g.entries, S.flat, gDisplay()).filter((x) => !x.staple), chk);
+      if (navigator.share && !EMBED && /iPhone|iPad|Android/.test(navigator.userAgent)) { try { await navigator.share({ title: 'Groceries', text }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+      try { await navigator.clipboard.writeText(text); toast('List copied — paste it into Notes, Reminders or a text.', 4500); }
+      catch (e) { modal(`<h2>Your list</h2><textarea rows="14" readonly>${esc(text)}</textarea><div class="m-foot"><button class="btn" data-act="m-close">Done</button></div>`); }
+    },
+  });
+
+  // =============================================================== FRIDGE
+  function renderFridge() {
+    if (S.fridge == null) S.fridge = LS.get('fridge', '');
+    $('#view').innerHTML = `
+      <section class="fridge">
+        <h1>Use what I have</h1>
+        <p class="muted">List what you want to use up — leftovers, half a bunch of herbs, the buttermilk about to expire. Recipes that use the most of it come first.</p>
+        <input id="fridge-q" class="big-input" value="${esc(S.fridge)}" placeholder="cilantro, buttermilk, chicken thighs" data-in="fridge" autocomplete="off">
+        <div id="fridge-res"></div>
+      </section>`;
+    renderFridgeResults();
+  }
+  const fridgeTerms = () => String(S.fridge || '').split(/[,\n;]+/).map((t) => t.trim()).filter(Boolean);
+  function renderFridgeResults() {
+    const box = $('#fridge-res'); if (!box) return;
+    const terms = fridgeTerms();
+    if (!terms.length) { box.innerHTML = ''; return; }
+    const res = [...S.recipes.values()].filter((e) => !e.recipe.deleted && !e.recipe.draft).map((e) => ({ r: e.recipe, m: C.fridgeMatch(e.recipe, terms, lookup), st: stats(e) }))
+      .filter((x) => x.m.score > 0).sort((a, b) => b.m.score - a.m.score || a.m.missing.length - b.m.missing.length || b.st.avg - a.st.avg).slice(0, 40);
+    box.innerHTML = res.length ? `<ul class="fr-list">${res.map(({ r, m }) => `<li>
+      <a href="#/r/${r.id}"><b>${esc(r.title)}</b></a>
+      <div class="small">Uses <b>${m.score} of ${terms.length}</b>: ${terms.filter((t) => m.matched.includes(C.groceryKey(t))).map((t) => `<span class="pill ok">${esc(t)}</span>`).join(' ')}</div>
+      <div class="small muted">${m.missing.length ? `Also needs: ${m.missing.slice(0, 8).map(esc).join(', ')}${m.missing.length > 8 ? '…' : ''}` : 'You have everything else (besides pantry staples).'}</div>
+      ${m.missing.length ? `<button class="btn xs" data-act="fr-add" data-id="${r.id}">🛒 Add what’s missing</button>` : ''}</li>`).join('')}</ul>`
+      : `<p class="muted">No saved recipes use ${terms.length > 1 ? 'those' : 'that'} yet.</p>`;
+  }
+  ACT['fr-add'] = (el) => {
+    const r = get(el.dataset.id).recipe, keys = C.fridgeMatch(r, fridgeTerms(), lookup).matched;
+    const { n } = addRecipeToGrocery(r, 1, (e) => { const k = C.groceryKey(e.item); return !e.fixed && !C.isStaple(k) && !keys.some((tk) => (' ' + k + ' ').includes(' ' + tk.split(' ')[0])); });
+    toast(`Added ${n} missing item${n === 1 ? '' : 's'} to your grocery list`);
+  };
+
+  // ======================================================== REFERENCE DRAWER
+  const REF = {
+    swaps: [
+      ['Buttermilk', '1 cup', '1 tbsp lemon juice or white vinegar + milk to make 1 cup; rest 5–10 min'],
+      ['Cake flour', '1 cup', '1 cup all-purpose flour − 2 tbsp, + 2 tbsp cornstarch; sift together'],
+      ['Self-rising flour', '1 cup', '1 cup all-purpose flour + 1½ tsp baking powder + ¼ tsp salt'],
+      ['Baking powder', '1 tsp', '¼ tsp baking soda + ½ tsp cream of tartar'],
+      ['Baking soda', '1 tsp', '3 tsp baking powder (and cut the recipe’s salt a little). Not 1:1 — soda is ~3× stronger and needs an acid.'],
+      ['Brown sugar', '1 cup', '1 cup granulated sugar + 1 tbsp molasses (2 tbsp for dark)'],
+      ['Powdered sugar', '1 cup', '1 cup granulated sugar + 1 tbsp cornstarch, blended until fine'],
+      ['Egg (binding, in baking)', '1 egg', '1 tbsp ground flaxseed + 3 tbsp water, rest 5 min'],
+      ['Heavy cream (not for whipping)', '1 cup', '¾ cup milk + ¼ cup melted butter'],
+      ['Sour cream', '1 cup', '1 cup plain Greek yogurt'],
+      ['Instant ↔ active dry yeast', '1 tsp instant', '1¼ tsp active dry, bloomed in the recipe’s warm liquid first'],
+      ['Fresh ↔ dried herbs', '1 tbsp fresh', '1 tsp dried'],
+      ['Garlic', '1 clove', '½ tsp jarred minced, or ⅛ tsp garlic powder'],
+      ['Table salt ↔ kosher salt', '1 tsp table salt', '1¼ tsp Morton kosher, or 2 tsp Diamond Crystal'],
+      ['Unsalted ↔ salted butter', '½ cup (1 stick)', 'Use salted and cut the recipe’s salt by ¼ tsp'],
+      ['Wine (in a sauce)', '1 cup', '1 cup broth + 1 tbsp vinegar or lemon juice'],
+    ],
+    doneness: [
+      ['Chicken & turkey (any cut)', 165], ['Ground beef, pork, lamb', 160], ['Steaks, chops & roasts (beef, pork, lamb, veal) — then rest 3 min', 145], ['Fish & shellfish', 145],
+      ['Egg dishes, casseroles with egg', 160], ['Leftovers & reheated casseroles', 165],
+      ['Beef to taste: rare · medium-rare · medium', '120–125 · 130–135 · 140–145'],
+      ['Lean bread (sourdough, baguette)', '200–210'], ['Enriched bread (brioche, sandwich loaf)', 190], ['Cheesecake & custard (center)', '150–160'],
+    ],
+    candy: [['Soft ball (fudge, fondant)', '235–240'], ['Firm ball (caramels)', '245–250'], ['Hard ball (nougat, marshmallow)', '250–265'], ['Soft crack (taffy, butterscotch)', '270–290'],
+      ['Hard crack (brittle, toffee, lollipops)', '300–310'], ['Caramelized sugar', '320–350'], ['Deep frying oil', '350–375']],
+  };
+  const fc = (v) => String(v).split(/(\d+)/).map((x) => (/^\d+$/.test(x) ? C.f2c(+x, 1) : x)).join('');
+  function openRef(tab) {
+    S.refTab = tab;
+    const tabs = [['swaps', 'Swaps'], ['temps', 'Doneness'], ['oven', 'Oven ↔ air fryer'], ['candy', 'Sugar & oil']];
+    const body = {
+      swaps: `<table class="rtable"><tbody>${REF.swaps.map(([a, q, b]) => `<tr><th>${esc(a)}<small>${esc(q)}</small></th><td>${esc(b)}</td></tr>`).join('')}</tbody></table>`,
+      temps: `<p class="small muted">Safe internal temperatures (USDA) — measure the thickest part, away from bone. Bread and custards are doneness, not safety.</p>
+        <table class="rtable"><tbody>${REF.doneness.map(([a, f]) => `<tr><th>${esc(a)}</th><td class="mono nowrap">${esc(f)}°F <small>${esc(fc(f))}°C</small></td></tr>`).join('')}</tbody></table>`,
+      oven: `<div class="row wrap gap-s conv"><label>Recipe oven <input id="rc-t" type="number" value="${esc(S.refTemp || 400)}" class="n4"> °F</label><label>for <input id="rc-m" type="number" value="${esc(S.refMin || 20)}" class="n3"> min</label><button class="btn sm" data-act="ref-convert">Convert</button></div>
+        <div id="rc-out"></div>
+        <p class="small muted">Rules of thumb: air fryer ≈ 25°F cooler and ~20% less time; convection ≈ 25°F cooler, same time. Thin or breaded foods brown fastest — check early.</p>
+        <table class="rtable"><tbody>${[300, 325, 350, 375, 400, 425, 450, 475, 500].map((f) => `<tr><th class="mono">${f}°F</th><td class="mono">${C.f2c(f)}°C</td></tr>`).join('')}</tbody></table>`,
+      candy: `<p class="small muted">Sugar stages at sea level. Water boils about 1°F lower for every 500 ft of elevation — subtract the same amount from candy targets.</p>
+        <table class="rtable"><tbody>${REF.candy.map(([a, f]) => `<tr><th>${esc(a)}</th><td class="mono nowrap">${esc(f)}°F <small>${esc(fc(f))}°C</small></td></tr>`).join('')}</tbody></table>`,
+    };
+    modal(`<div class="ref"><div class="row between"><h2>Swaps &amp; temperatures</h2><button class="btn sm ghost" data-act="m-close" aria-label="Close">✕</button></div>
+      <div class="seg sm ref-tabs">${tabs.map(([k, l]) => `<button class="${tab === k ? 'on' : ''}" data-act="ref-tab" data-v="${k}">${l}</button>`).join('')}</div>
+      <div class="ref-body">${body[tab]}</div></div>`, 'wide');
+    if (tab === 'oven') refConvert();
+  }
+  function refConvert() {
+    const t = +($('#rc-t') || {}).value, m = +($('#rc-m') || {}).value || null; if (!(t > 0)) return;
+    S.refTemp = t; S.refMin = m;
+    const a = C.ovenConvert(t, m, 'airfryer'), c = C.ovenConvert(t, m, 'convection');
+    $('#rc-out').innerHTML = `<div class="stats"><div class="stat"><b class="mono">${a.temp}°F${a.minutes ? ' · ' + a.minutes + ' min' : ''}</b><span>Air fryer</span><small>${esc(a.note)}</small></div>
+      <div class="stat"><b class="mono">${c.temp}°F${c.minutes ? ' · ' + c.minutes + ' min' : ''}</b><span>Convection oven</span><small>${esc(c.note)}</small></div>
+      <div class="stat"><b class="mono">${C.f2c(t)}°C</b><span>Same oven in Celsius</span></div></div>`;
+  }
+
+  // ================================================================ PRINT
+  const plainStep = (t) => String(t).replace(/\{([^}]+)\}/g, '$1');
+  function printRecipes(list, useScale) {
+    const html = list.map((r) => {
+      const s2 = useScale ? scaleOf(r) : { factor: 1, units: S.settings.units };
+      const times = Object.entries(r.times || {}).filter(([, v]) => v).map(([k, v]) => `${k} ${esc(v)}`).join(' · ');
+      return `<article class="pr">
+        <h1>${esc(r.title)}</h1>
+        <p class="pr-meta">Makes ${esc(C.trimNum(yieldNum(r, s2), 2))} ${esc(r.servingsLabel || 'servings')}${Math.abs(s2.factor - 1) > 1e-6 ? ` (×${C.trimNum(s2.factor, 2)})` : ''}${times ? ' · ' + times : ''}${r.mode === 'baking' ? ' · baking' : ''}${r.source ? ' · ' + esc(r.source) : ''}</p>
+        ${r.description ? `<p class="pr-desc">${esc(r.description)}</p>` : ''}
+        <div class="pr-cols">
+          <div>${(r.parts || []).filter((p) => (p.ingredients || []).length).map((p) => `${p.name ? `<h3>${esc(p.name)}</h3>` : '<h3>Ingredients</h3>'}<ul>${p.ingredients.map((i) => {
+            const q = i.qty == null ? null : i.fixed ? i.qty : i.qty * s2.factor, qm = i.qtyMax == null ? null : i.fixed ? i.qtyMax : i.qtyMax * s2.factor;
+            const sub = i.sub && lookup(i.sub), a = sub && (!i.unit || i.unit === 'batch') ? { text: C.fmtFrac(Math.round((q || 1) * 100) / 100) + ' batch' } : C.formatAmount(i, q, qm, s2.units, S.flat);
+            return `<li><b>${esc(a.text)}</b> ${esc(sub ? sub.title : i.item)}${i.note ? `, <i>${esc(i.note)}</i>` : ''}</li>`;
+          }).join('')}</ul>`).join('')}</div>
+          <div>${(r.parts || []).filter((p) => (p.steps || []).length).map((p) => `${p.name ? `<h3>${esc(p.name)}</h3>` : '<h3>Method</h3>'}<ol>${p.steps.map((st) => `<li>${esc(plainStep(st.text))}</li>`).join('')}</ol>`).join('')}</div>
+        </div>
+        ${r.notes ? `<div class="pr-notes"><h3>Notes</h3><p>${esc(r.notes).replace(/\n/g, '<br>')}</p></div>` : ''}
+      </article>`;
+    }).join('');
+    let pb = $('#printbook'); if (!pb) { pb = document.createElement('div'); pb.id = 'printbook'; document.body.appendChild(pb); }
+    pb.innerHTML = list.length > 1 ? `<div class="pr-cover"><h1>My Recipes</h1><p>${list.length} recipes · printed ${fmtDate(Date.now())}</p><ol>${list.map((r) => `<li>${esc(r.title)}</li>`).join('')}</ol></div>` + html : html;
+    document.body.classList.add('printing');
+    const done = () => { document.body.classList.remove('printing'); window.removeEventListener('afterprint', done); };
+    window.addEventListener('afterprint', done);
+    try { window.print(); } catch (e) { toast('Printing isn’t available here.'); done(); }
+    setTimeout(() => { if (!window.matchMedia('print').matches) done(); }, 60000);
+  }
 
   // ======================================================= VIDEO IMPORT POLL
   async function pollImports(force) {
@@ -3461,6 +4006,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       }
     }
     route();
+    updateBadges();
     pollImports(false).catch(() => {});
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && window.top === window) {
       const hadController = !!navigator.serviceWorker.controller;
