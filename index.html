@@ -151,6 +151,10 @@ details.dd.right .dd-menu { left: auto; right: 0; }
 .actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1rem; align-items: center; }
 .wake { border: 1px solid var(--line); background: var(--surface); color: var(--muted); width: 2.4rem; height: 2.4rem; border-radius: 50%; cursor: pointer; font-size: 1.1rem; }
 .wake.on { color: var(--accent); border-color: var(--accent); }
+.wake.pill-btn { width: auto; height: auto; border-radius: 999px; padding: .4rem .75rem; font: 600 .82rem/1 var(--sans); white-space: nowrap; }
+.wake-item { justify-content: space-between; } .wake-state { font: 600 .78rem/1 var(--sans); color: var(--muted); padding: .25rem .5rem; border-radius: 999px; background: var(--surface-2); }
+.wake-state.on { color: var(--accent-ink); background: var(--accent); }
+.dd-cancel { display: none !important; }
 .tabs { display: flex; gap: 1.25rem; margin: .5rem 0 1.25rem; position: relative; padding-bottom: 2px; }
 .tabs::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--stitch); }
 .tabs a { text-decoration: none; color: var(--muted); font-weight: 600; padding: .5rem 0; border-bottom: 3px solid transparent; position: relative; z-index: 1; }
@@ -246,7 +250,7 @@ body[data-view="cook"] { padding-bottom: 0; }
 .cook { --fs: calc(1.15rem * var(--cook-scale)); display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
 .cook-head { display: flex; align-items: center; gap: .75rem; padding: calc(env(safe-area-inset-top) + .5rem) 1rem .5rem; border-bottom: 1px solid var(--line); background: var(--surface); }
 .cook-title { flex: 1; display: flex; flex-direction: column; min-width: 0; } .cook-title b { font: 600 1.15rem/1.2 var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cook-title span { font-size: .8rem; }
+.cook-title span { font-size: .8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cook-tabs { display: none; }
 .cook-body { flex: 1; display: grid; grid-template-columns: minmax(320px, 36%) 1fr; min-height: 0; }
 .cook-ing, .cook-steps { overflow: auto; padding: 1.25rem 1.5rem 3rem; -webkit-overflow-scrolling: touch; }
@@ -364,10 +368,12 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   .filters::-webkit-scrollbar { display: none; }
   .filters .dd-menu { position: fixed; left: 1rem; right: 1rem; top: auto; }
   .filters > * { flex-shrink: 0; }
-  .actions details.dd .dd-menu { position: fixed; left: .75rem; right: .75rem; top: auto; bottom: calc(env(safe-area-inset-bottom) + 74px); min-width: 0; z-index: 60;
+  .actions details.dd .dd-menu { position: fixed; left: .75rem; right: .75rem; top: auto; bottom: calc(env(safe-area-inset-bottom) + 74px); min-width: 0; z-index: 60; max-height: calc(100dvh - 160px);
     padding: .5rem; border-radius: 16px; box-shadow: 0 -8px 40px rgba(0, 0, 0, .35); }
   .actions details.dd .dd-menu button { padding: .85rem .9rem; font-size: 1rem; }
   .actions details.dd[open]::before { content: ""; position: fixed; inset: 0; background: rgba(10, 12, 18, .35); z-index: 59; }
+  .actions .dd-menu .dd-cancel { display: flex !important; justify-content: center; font-weight: 700; margin-top: .35rem; border-top: 1px solid var(--line) !important; border-radius: 0 0 10px 10px; }
+  .cook-head .wake.pill-btn { padding: .45rem .6rem; }
   .hide-sm { display: none; }
   .search { min-width: 0; flex-basis: 100%; max-width: none; }
 }
@@ -378,6 +384,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   .tchip { border: 0; padding: 0; color: inherit; background: none; } .r-cover { max-height: 220px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .nojs { opacity: 1; } }
+.dd-menu button.danger { color: var(--danger); }
 </style>
 </head>
 <body data-view="library">
@@ -2000,7 +2007,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   const Wake = {
     lock: null, wanted: false,
     async set(on) {
-      this.wanted = on && S.settings.wake;
+      this.wanted = on && S.settings.wake && !S.wakeOff;
       if (this.wanted) await this.acquire(); else if (this.lock) { try { await this.lock.release(); } catch (e) { /* */ } this.lock = null; }
       this.badge();
     },
@@ -2009,7 +2016,12 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       try { this.lock = await navigator.wakeLock.request('screen'); this.lock.addEventListener('release', () => { this.lock = null; this.badge(); }); } catch (e) { this.lock = null; }
       this.badge();
     },
-    badge() { $$('.wake').forEach((el) => { el.classList.toggle('on', !!this.lock); el.title = this.lock ? 'Screen will stay awake' : ('wakeLock' in navigator ? 'Screen may sleep — tap to keep awake' : 'This browser can’t keep the screen awake'); }); },
+    badge() {
+      const ok = 'wakeLock' in navigator;
+      $$('.wake').forEach((el) => { el.classList.toggle('on', !!this.lock); el.title = this.lock ? 'Your screen won’t sleep while this recipe is open. Tap to allow sleep.' : ok ? 'Your screen may sleep. Tap to keep it on.' : 'This browser can’t keep the screen on'; });
+      $$('.wake-txt').forEach((el) => { el.textContent = this.lock ? 'Screen on' : 'Screen can sleep'; });
+      $$('.wake-state').forEach((el) => { el.textContent = !ok ? 'Not supported' : this.lock ? 'On' : 'Off'; el.classList.toggle('on', !!this.lock); });
+    },
   };
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && Wake.wanted) Wake.acquire(); });
 
@@ -2104,6 +2116,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     if (S.pendingFolder) return renderReconnect();
     if (!S.ready) return;
     const wantWake = view === 'r' || view === 'cook';
+    if (!wantWake) S.wakeOff = false;
     Wake.set(wantWake);
     window.scrollTo(0, 0);
     if (view === 'r' && id) return renderRecipe(id, sub || 'recipe');
@@ -2369,9 +2382,10 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
                 <button data-act="duplicate" data-id="${r.id}">Duplicate</button>
                 <button data-act="export-one" data-id="${r.id}">Share / export file</button>
                 <button data-act="print">Print</button>
+                <button data-act="wake" class="wake-item"><span>☀ Keep screen awake</span><span class="wake-state"></span></button>
                 <button data-act="delete" data-id="${r.id}" class="danger">Move to trash</button>
+                <button data-act="dd-close" class="dd-cancel">Cancel</button>
               </div></details>
-              <button class="wake" data-act="wake" title="Keep screen awake">☀</button>
             </div>
           </div>
         </header>
@@ -2472,8 +2486,8 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
           <div class="row gap-s">
             <button class="btn ghost sm" data-act="cook-size" data-d="-0.1" aria-label="Smaller text">A−</button>
             <button class="btn ghost sm" data-act="cook-size" data-d="0.1" aria-label="Larger text">A+</button>
-            <button class="wake" data-act="wake">☀</button>
-            <button class="btn sm" data-act="log-cook" data-id="${r.id}">Done · Log it</button>
+            <button class="wake pill-btn" data-act="wake"><span aria-hidden="true">☀</span> <span class="wake-txt">Screen on</span></button>
+            <button class="btn sm" data-act="log-cook" data-id="${r.id}"><span class="hide-sm">Done · </span>Log it</button>
           </div>
         </header>
         <div class="cook-tabs">
@@ -3015,7 +3029,14 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       s.factor = res.factor; s.yieldOverride = d.by === 'dough' ? { n: +d.count, factor: res.factor } : null; renderRecipe(r.id, 'recipe');
       toast(`Scaled ×${C.trimNum(res.factor, 3)} → ${C.trimNum(res.target, 0)} g ${d.by === 'flour' ? 'flour' : 'dough'}`);
     },
-    wake: async () => { if (!S.settings.wake) { S.settings.wake = true; saveSettings(); } await Wake.set(true); if (!Wake.lock) toast('wakeLock' in navigator ? 'Couldn’t keep the screen awake — try tapping again.' : 'This browser can’t keep the screen awake.'); },
+    wake: async () => {
+      if (Wake.lock) { S.wakeOff = true; await Wake.set(false); toast('Your screen can sleep normally now'); return; }
+      S.wakeOff = false;
+      if (!S.settings.wake) { S.settings.wake = true; saveSettings(); }
+      await Wake.set(true);
+      toast(Wake.lock ? 'Your screen will stay on while a recipe is open' : 'wakeLock' in navigator ? 'Couldn’t keep the screen on — try again' : 'This browser can’t keep the screen on');
+    },
+    'dd-close': (el) => { const d = el.closest('details'); if (d) d.open = false; },
     // timers
     'timer-start': (el, ev) => { ev.preventDefault(); ev.stopPropagation(); startTimer(el.dataset.label, +el.dataset.sec, el.dataset.ctx); },
     'timer-pause': (el) => { const t = S.timers.find((x) => x.id === el.dataset.id); if (!t) return; if (t.state === 'pause') { t.endAt = Date.now() + t.left * 1000; t.state = 'run'; } else { t.left = remaining(t); t.state = 'pause'; } saveTimers(); renderTimers(); },
@@ -3316,7 +3337,11 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     if (ab) { const f = S.askResolve; S.askResolve = null; if (f) f(ab.dataset.ask === '1'); closeModal(); return; }
     const el = ev.target.closest('[data-act]');
     // close dropdown menus when clicking elsewhere
-    $$('details.dd[open]').forEach((d) => { if (!d.contains(ev.target)) d.open = false; });
+    $$('details.dd[open]').forEach((d) => {
+      const inMenu = ev.target.closest('.dd-menu'), onToggle = ev.target.closest('summary');
+      // the dimmed backdrop is the <details> itself; menu items close the menu after running
+      if (!d.contains(ev.target) || ev.target === d || (inMenu && d.contains(inMenu) && ev.target.closest('button') && !ev.target.closest('label'))) { if (!onToggle || !d.contains(onToggle)) d.open = false; }
+    });
     if (!el) return;
     const fn = ACT[el.dataset.act];
     if (fn) { if (el.tagName === 'BUTTON' || el.tagName === 'A') ev.preventDefault(); Promise.resolve(fn(el, ev)).catch((e) => { console.error(e); toast('Error: ' + e.message, 5000); }); }
@@ -3357,6 +3382,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   document.addEventListener('change', (ev) => { if (ev.target.id === 'cv-u') convert(); });
   document.addEventListener('keydown', (ev) => {
     if (ev.key === 'Escape' && $('#modal').classList.contains('on')) return closeModal();
+    if (ev.key === 'Escape') $$('details.dd[open]').forEach((d) => { d.open = false; });
     if (ev.key === 'Enter' && S.askResolve && ev.target.id && ev.target.id.startsWith('af-')) { ev.preventDefault(); const f = S.askResolve; S.askResolve = null; f(true); closeModal(); return; }
     if (document.body.dataset.view === 'cook' && !/INPUT|TEXTAREA|SELECT/.test(ev.target.tagName)) {
       if (ev.key === 'ArrowRight' || ev.key === ' ' || ev.key === 'j') { ev.preventDefault(); cookGoto(S.cook.cs.step + 1); }
