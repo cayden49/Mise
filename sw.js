@@ -1,5 +1,5 @@
 // Mise service worker — caches the app shell so it works offline. Data never leaves the device.
-const CACHE = 'mise-8698c215d1';
+const CACHE = 'mise-82c718d70e';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
@@ -8,7 +8,8 @@ self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET' || u.origin !== location.origin) return;
   // network-first for the page (picks up updates), cache fallback offline
   if (e.request.mode === 'navigate') {
-    e.respondWith(fetch(e.request).then((r) => { const c = r.clone(); caches.open(CACHE).then((x) => x.put('./index.html', c)); return r; }).catch(() => caches.match('./index.html')));
+    // cache: 'no-cache' asks GitHub every time (a quick "not modified" when nothing changed), so updates show up on the next open
+    e.respondWith(fetch(new Request(e.request.url, { cache: 'no-cache', credentials: 'same-origin' })).then((r) => { const c = r.clone(); caches.open(CACHE).then((x) => x.put('./index.html', c)); return r; }).catch(() => caches.match('./index.html')));
     return;
   }
   e.respondWith(caches.match(e.request).then((m) => m || fetch(e.request)));

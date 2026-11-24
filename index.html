@@ -1776,7 +1776,8 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
 (function () {
   'use strict';
   const C = window.MiseCore, ST = window.MiseStorage;
-  const APP_VERSION = '1.0.0';
+  const APP_VERSION = '1.1.0';
+  const BUILD = '82c718d70e';
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -2897,7 +2898,13 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
           <p class="small muted">One file with every recipe, log, version, photo and your pantry. Keep a copy somewhere other than your sync folder.</p>
           <button class="btn sm" data-act="backup">Download full backup</button>
         </div>
-        <p class="small muted center">Mise ${APP_VERSION} · no account, no server — your recipes are yours.</p>
+        <div class="card-s">
+          <h2>App version</h2>
+          <p class="small">Mise ${APP_VERSION} · build <b class="mono">${BUILD}</b></p>
+          <p class="small muted">After you upload a new version to GitHub, it loads the next time you open Mise. If it doesn’t, tap below.</p>
+          <button class="btn sm" data-act="force-update">Check for update</button>
+        </div>
+        <p class="small muted center">No account, no server — your recipes are yours.</p>
       </section>`;
   }
 
@@ -3035,6 +3042,18 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       if (!S.settings.wake) { S.settings.wake = true; saveSettings(); }
       await Wake.set(true);
       toast(Wake.lock ? 'Your screen will stay on while a recipe is open' : 'wakeLock' in navigator ? 'Couldn’t keep the screen on — try again' : 'This browser can’t keep the screen on');
+    },
+    'force-update': async () => {
+      toast('Checking for an update…');
+      try {
+        const res = await fetch('./sw.js?check=' + Date.now(), { cache: 'no-store' });
+        const m = (await res.text()).match(/mise-([0-9a-f]{6,})/);
+        if (m && m[1] === BUILD) return toast('You’re on the latest version (build ' + BUILD + ').', 4000);
+        if (S.dirty) return toast('Save or cancel your edit first.');
+        for (const k of await caches.keys()) await caches.delete(k);
+        for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
+        location.replace(location.pathname + '?v=' + Date.now() + location.hash); // brand-new URL skips every cache
+      } catch (e) { toast('Couldn’t reach GitHub — are you online?', 4000); }
     },
     'dd-close': (el) => { const d = el.closest('details'); if (d) d.open = false; },
     // timers
@@ -3423,6 +3442,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
 
   // ================================================================ BOOT
   async function boot() {
+    if (/[?&]v=\d+/.test(location.search)) history.replaceState(null, '', location.pathname + location.hash);
     applyTheme();
     renderTimers();
     try {
@@ -3442,7 +3462,17 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     }
     route();
     pollImports(false).catch(() => {});
-    if ('serviceWorker' in navigator && location.protocol === 'https:' && window.top === window) navigator.serviceWorker.register('sw.js').catch(() => {});
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && window.top === window) {
+      const hadController = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((reg) => reg.update()).catch(() => {});
+      // a new version just took over: reload once so you see it (never while editing)
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!hadController || S.reloadingForUpdate) return;
+        S.reloadingForUpdate = true;
+        if (S.dirty || $('#modal').classList.contains('on')) { toast('Mise was updated — it’ll load the new version next time you open it.', 5000); return; }
+        location.reload();
+      });
+    }
   }
   window.Mise = { S, C, ACT, reload, buildBundle, mergeBundle };
   boot();
