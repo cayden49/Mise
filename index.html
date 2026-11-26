@@ -431,6 +431,8 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .nojs { opacity: 1; } }
 .dd-menu button.danger { color: var(--danger); }
+
+.card-s { scroll-margin-top: 84px; }
 </style>
 </head>
 <body data-view="library">
@@ -2024,7 +2026,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   'use strict';
   const C = window.MiseCore, ST = window.MiseStorage;
   const APP_VERSION = '1.1.0';
-  const BUILD = '24a77eb3dd';
+  const BUILD = 'a2255cd56e';
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -2113,6 +2115,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     let u = null;
     if (S.draft && S.draft._pending && S.draft._pending[file]) u = S.draft._pending[file].url;
     else u = await photoURL(e.recipe, file);
+    if (!u && /\.jpg$/.test(file) && !/\.thumb\.jpg$/.test(file)) u = await photoURL(e.recipe, file.replace(/\.jpg$/, '.thumb.jpg'));
     if (u) { img.src = u; img.classList.add('ok'); } else img.classList.add('missing');
   }
   const hydrate = (root = document) => $$('img[data-ph]:not(.ok):not(.missing)', root).forEach((img) => (io ? io.observe(img) : loadImg(img)));
@@ -2120,7 +2123,44 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
 
   // ------------------------------------------------------------- persistence
   function stamp(r) { r.updatedAt = C.now(); r.deviceId = S.settings.device.id; r.deviceName = S.settings.device.name; return r; }
+  const PHONE_COPY = 'for-phone.mise.json';
+  function changed() {
+    if (S.store && S.store.kind === 'folder') schedulePhoneCopy();
+  }
+  let phoneCopyT = null;
+  function schedulePhoneCopy(delay = 15000) { clearTimeout(phoneCopyT); phoneCopyT = setTimeout(() => writePhoneCopy().catch((e) => console.warn('phone copy', e)), delay); }
+  /** Computers keep one always-current file for the iPhone: everything, with phone-size photos. */
+  async function writePhoneCopy() {
+    if (!S.store || S.store.kind !== 'folder') return;
+    const b = await buildBundle({ photos: 'thumbs' });
+    b.kind = 'phone-copy';
+    const text = JSON.stringify(b);
+    await S.store.writeBundle(PHONE_COPY, text);
+    LS.set('phoneCopy', { at: Date.now(), kb: Math.round(text.length / 1024), n: b.recipes.length });
+  }
+  const latestChange = () => {
+    let t = 0;
+    for (const e of S.recipes.values()) {
+      if (e.recipe.deviceId === S.settings.device.id || !LS.get('lastGet', 0)) t = Math.max(t, ts(e.recipe.updatedAt));
+      for (const l of e.logs || []) if (ts(l.createdAt) > t && (l.device === S.settings.device.name || !l.device)) t = ts(l.createdAt);
+      for (const v of e.versions || []) if (ts(v.createdAt) > t && (v.device === S.settings.device.name || !v.device)) t = ts(v.createdAt);
+    }
+    return t;
+  };
+  const safeAt = () => Math.max(LS.get('lastBackup', 0), LS.get('lastSend', 0));
+  /** On the phone: should we nudge? Unsaved-elsewhere changes, last safe copy over a week old (or never), not snoozed. */
+  function backupDue() {
+    if (!S.store || S.store.kind !== 'local' || EMBED) return null;
+    const n = [...S.recipes.values()].filter((e) => !e.recipe.deleted && !e.recipe.draft).length;
+    if (!n) return null;
+    const last = safeAt(), lc = latestChange();
+    if (lc <= last || Date.now() < LS.get('backupSnooze', 0)) return null;
+    if (last && Date.now() - last < 7 * DAY) return null;
+    if (!last && Date.now() - (LS.get('firstUse', 0) || Date.now()) < 2 * DAY) return null;
+    return { last, n, synced: !!LS.get('lastGet', 0) };
+  }
   async function saveRecipe(r) {
+    setTimeout(changed, 0);
     stamp(r);
     const e = get(r.id) || { recipe: r, logs: [], versions: [] };
     e.recipe = r; S.recipes.set(r.id, e);
@@ -2138,6 +2178,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     return entry;
   }
   async function addLog(r, entry) {
+    setTimeout(changed, 0);
     const e = get(r.id);
     e.logs = await S.store.appendLog(r, entry);
   }
@@ -2182,16 +2223,19 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
   async function reload() { await loadLibrary(); route(); }
 
   // ------------------------------------------------------------ sync bundles
-  async function buildBundle({ since = 0, photos = 'all', ids = null } = {}) {
+  async function buildBundle({ since = 0, photos = 'all', ids = null, mine = false } = {}) {
     const recs = [];
     for (const e of S.recipes.values()) {
       if (ids && !ids.includes(e.recipe.id)) continue;
-      const changed = !since || ts(e.recipe.updatedAt) > since || (e.logs || []).some((l) => ts(l.createdAt) > since) || (e.versions || []).some((v) => ts(v.createdAt) > since);
+      const me = S.settings.device;
+      const changed = mine // only what this device changed (don't echo back what it just received)
+        ? (e.recipe.deviceId === me.id && (!since || ts(e.recipe.updatedAt) > since)) || (e.logs || []).some((l) => l.device === me.name && ts(l.createdAt) > since) || (e.versions || []).some((v) => v.device === me.name && ts(v.createdAt) > since)
+        : !since || ts(e.recipe.updatedAt) > since || (e.logs || []).some((l) => ts(l.createdAt) > since) || (e.versions || []).some((v) => ts(v.createdAt) > since);
       if (!changed) continue;
       const ph = {};
       if (photos !== 'none' && !e.recipe.deleted) {
         let list = photos === 'cover' ? [coverOf(e.recipe)].filter(Boolean) : [...(e.recipe.photos || []), ...liveLogs(e).flatMap((l) => l.photos || [])];
-        for (const p of list) for (const f of [p.file, p.thumb]) {
+        for (const p of list) for (const f of photos === 'thumbs' ? [p.thumb || p.file] : [p.file, p.thumb]) {
           if (!f || ph[f]) continue;
           const b = await S.store.getPhoto(e.recipe, f);
           if (b) ph[f] = await ST.blobToDataURL(b);
@@ -2229,6 +2273,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
       const m = C.mergeDensities(S.densities, b.densities);
       if (JSON.stringify(m) !== JSON.stringify(S.densities)) { S.densities = m; S.flat = C.flatDensities(m); await S.store.saveDensities(m); }
     }
+    if (added || updated) setTimeout(changed, 0);
     return { added, updated };
   }
   async function ingestFolderBundles(quiet) {
@@ -2236,11 +2281,12 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     const done = new Set(LS.get('ingested', []));
     let tot = { added: 0, updated: 0, files: 0 };
     for (const { name, handle } of await S.store.listBundles()) {
-      if (done.has(name)) continue;
+      if (done.has(name) || name === PHONE_COPY) continue;
       try {
         const f = await handle.getFile();
         const b = JSON.parse(await f.text());
         if (b.device && b.device.id === S.settings.device.id) { done.add(name); continue; }
+        if (b.kind === 'phone-copy') continue; // another computer's snapshot for the phone — computers share the folder already
         const r = await mergeBundle(b);
         tot.added += r.added; tot.updated += r.updated; tot.files++;
         done.add(name);
@@ -2375,7 +2421,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     if (view === 'pantry') return renderPantry();
     if (view === 'grocery') return renderGrocery();
     if (view === 'fridge') return renderFridge();
-    if (view === 'settings') return renderSettings();
+    if (view === 'settings') { renderSettings(); if (id) setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollIntoView({ block: 'start' }); }, 30); return; }
     return renderLibrary();
   }
   window.addEventListener('hashchange', async () => {
@@ -2434,6 +2480,9 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
         <div class="dd-menu">${items.length ? items.map((t) => `<label><input type="checkbox" data-in="lib-multi" data-key="${key}" value="${esc(t)}" ${L[key].includes(t) ? 'checked' : ''}> ${esc(t)}</label>`).join('') : '<p class="muted">None yet</p>'}</div></details>`;
     $('#view').innerHTML = `
       <section class="lib">
+        ${(() => { const due = backupDue(); if (!due) return ''; return `<div class="banner warn backup">
+          <b>Your recipes are only on this phone.</b> ${due.last ? `Last ${due.synced ? 'sync' : 'backup'} was ${rel(due.last)}.` : 'They haven’t been backed up yet.'} If the app were deleted, ${due.n} recipe${due.n === 1 ? '' : 's'} and your cook logs would go with it.
+          <div class="row gap-s wrap">${due.synced ? `<a class="btn sm primary" href="#/settings/sync">Sync with computer</a>` : `<button class="btn sm primary" data-act="backup">Back up now</button>`}<button class="btn sm ghost" data-act="backup-later">Remind me later</button></div></div>`; })()}
         ${EMBED && !LS.get('embedNote') ? `<div class="banner"><b>Preview.</b> You're trying Mise inside Claude, so recipes stay in this browser and saving files is turned off. Install it from the download (open <span class="mono">index.html</span> in Chrome/Edge, or host it for iPhone) to use a synced iCloud folder. <button class="btn sm ghost" data-act="embed-ok">Got it</button></div>` : ''}
         ${S.warnings.length ? `<div class="banner warn">${S.warnings.slice(0, 3).map(esc).join('<br>')}${S.warnings.length > 3 ? `<br>…and ${S.warnings.length - 3} more` : ''} <button class="btn sm ghost" data-act="dismiss-warn">Dismiss</button></div>` : ''}
         ${S.firstRun && S.store.kind === 'local' && ST.FolderStore.supported() ? `<div class="banner">
@@ -3141,25 +3190,36 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
           <h2>Library storage</h2>
           ${st.kind === 'folder' ? `<p>Recipes are saved as files in <b class="mono">${esc(st.name)}</b>. Anything that syncs that folder (iCloud Drive, Dropbox, OneDrive, Syncthing) keeps your computers in step.</p>
             <div class="row gap wrap"><button class="btn sm" data-act="rescan">Rescan folder</button><button class="btn sm ghost" data-act="pick-folder">Switch folder…</button><button class="btn sm ghost" data-act="to-local">Use on-device storage instead</button></div>`
-          : `<p>Recipes are saved <b>on this device</b> (${nb} recipe${nb === 1 ? '' : 's'}).${st.persisted === false ? ' <span class="pill warn">storage not marked persistent</span>' : ''}</p>
+          : `<p>Recipes are saved <b>on this device</b> (${nb} recipe${nb === 1 ? '' : 's'}).${st.persisted === false && !navigator.standalone && !window.matchMedia('(display-mode: standalone)').matches ? ' <span class="pill warn">not installed — add to Home Screen</span>' : ''}</p>
             ${ST.FolderStore.supported() ? `<p class="small muted">This browser can save straight to a folder. Choose (or create) a folder named <b>Mise</b> inside iCloud Drive to sync with your other computers.</p>
               <div class="row gap"><button class="btn primary sm" data-act="pick-folder">Choose library folder…</button></div>`
               : `<p class="small muted">This browser can't write to folders directly (Safari and iPhone don't allow it). Use the sync bundles below to move recipes through iCloud Drive.${/iPhone|iPad/.test(navigator.userAgent) && !navigator.standalone ? ' <b>Tip:</b> tap Share → <b>Add to Home Screen</b> so iOS keeps your recipes stored long-term and the app works offline.' : ''}</p>`}`}
         </div>
 
-        <div class="card-s">
+        ${st.kind === 'folder' ? (() => { const pc = LS.get('phoneCopy', null); return `<div class="card-s" id="sync">
           <h2>Sync with iPhone</h2>
-          <p class="small">${st.kind === 'folder'
-            ? `Computers read the folder directly. Your iPhone exchanges <b>bundle files</b> through <span class="mono">${esc(st.name)}/_bundles</span>: bundles saved there by your phone are merged automatically every time this app opens or rescans.`
-            : 'Export a bundle and save it to <span class="mono">iCloud Drive › Mise › _bundles</span>; your computers merge it automatically. To bring desktop changes here, import the bundle your computer wrote to the same folder.'}
-            Merging is safe to repeat: recipes keep the newest edit, cook logs and versions are combined, nothing is overwritten.</p>
-          <div class="row gap wrap">
+          <p class="small">This computer keeps an always-current copy for your phone at <span class="mono">${esc(st.name)}/_bundles/${PHONE_COPY}</span> — it updates a few seconds after any change. On the phone: Settings › <b>Get latest from computer</b>, and pick that file.</p>
+          <p class="small">Changes your phone sends land in the same <span class="mono">_bundles</span> folder and are merged automatically whenever Mise is open here.</p>
+          <p class="small muted">${pc ? `Phone copy updated ${rel(pc.at)} · ${pc.n} recipes · ${pc.kb >= 1024 ? C.trimNum(pc.kb / 1024, 1) + ' MB' : pc.kb + ' KB'} (photos in phone size)` : 'Phone copy not written yet.'}</p>
+          <div class="row gap wrap"><button class="btn sm" data-act="phone-copy-now">Update phone copy now</button><button class="btn sm ghost" data-act="ingest">Check for phone changes</button><button class="btn sm ghost" data-act="clean-bundles">Clean up old files</button></div>
+          <details class="more"><summary class="small muted">More options</summary>
+          <div class="row gap wrap">`; })() : (() => { const lg = LS.get('lastGet', 0), lsn = LS.get('lastSend', 0), lb = LS.get('lastBackup', 0); return `<div class="card-s" id="sync">
+          <h2>Sync with computer</h2>
+          <p class="small">Your computer keeps a file called <b class="mono">${PHONE_COPY}</b> in <span class="mono">iCloud Drive › Mise › _bundles</span>. Two taps each way — and sending also backs up this phone.</p>
+          <div class="sync-steps">
+            <div><b>1. Send my changes</b><p class="small muted">Tap, then <b>Save to Files</b> › iCloud Drive › Mise › _bundles. Your computer merges it on its own.${lsn ? ` Last sent ${rel(lsn)}.` : ''}</p>
+              <button class="btn primary" data-act="sync-send">Send my changes</button></div>
+            <div><b>2. Get latest from computer</b><p class="small muted">Tap, then pick <b>${PHONE_COPY}</b> in iCloud Drive › Mise › _bundles.${lg ? ` Last updated ${rel(lg)}.` : ''}</p>
+              <button class="btn" data-act="sync-get">Get latest from computer</button></div>
+          </div>
+          <p class="small muted">${lb ? `Last full backup ${rel(lb)}. ` : ''}No computer? Use <b>Download full backup</b> below now and then.</p>
+          <details class="more"><summary class="small muted">More options</summary>
+          <div class="row gap wrap">`; })()}
             <select id="bx-photos"><option value="all">With all photos</option><option value="cover">Cover photos only</option><option value="none">No photos (small)</option></select>
             <button class="btn sm primary" data-act="export-bundle" data-since="1">Export changes${last ? ' since ' + fmtDate(last) : ''}</button>
             <button class="btn sm" data-act="export-bundle" data-since="0">Export everything</button>
             <button class="btn sm" data-act="import-files">Import bundle…</button>
-            ${st.kind === 'folder' ? `<button class="btn sm ghost" data-act="ingest">Check _bundles now</button><button class="btn sm ghost" data-act="clean-bundles">Clean up old bundles</button>` : ''}
-          </div>
+          </div></details>
         </div>
 
         <div class="card-s">
@@ -3653,6 +3713,7 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
     'clean-bundles': async () => {
       const done = new Set(LS.get('ingested', [])); let n = 0;
       for (const { name, handle } of await S.store.listBundles()) {
+        if (name === PHONE_COPY) continue;
         const f = await handle.getFile();
         if ((done.has(name) && Date.now() - f.lastModified > 14 * DAY) || Date.now() - f.lastModified > 60 * DAY) { await S.store.bundlesDir.removeEntry(name).catch(() => {}); n++; }
       }
@@ -3675,7 +3736,34 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
         renderSettings();
       }
     },
-    backup: async () => { toast('Building backup…'); const b = await buildBundle({ photos: 'all' }); download(`mise-backup-${todayISO()}.mise.json`, JSON.stringify(b)); },
+    'backup-later': () => { LS.set('backupSnooze', Date.now() + 3 * DAY); renderLibrary(); },
+    'phone-copy-now': async () => { toast('Writing phone copy…'); await writePhoneCopy(); toast('Phone copy updated'); renderSettings(); },
+    'sync-send': async () => {
+      const since = LS.get('lastSend', 0);
+      toast('Packing your changes…');
+      const b = await buildBundle({ since, photos: 'all', mine: !!LS.get('lastGet', 0) });
+      if (!b.recipes.length && (since || LS.get('lastGet', 0))) { LS.set('lastSend', Date.now()); toast('Nothing new to send — you’re backed up.'); return renderSettings(); }
+      const name = `from-${C.slug(S.settings.device.name)}-${new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')}.mise.json`;
+      const res = await shareOrDownload(name, JSON.stringify(b));
+      if (res === 'cancelled') return;
+      LS.set('lastSend', Date.now()); LS.set('lastExport', Date.now());
+      toast(`Sent ${b.recipes.length} recipe${b.recipes.length === 1 ? '' : 's'} — save it in iCloud Drive › Mise › _bundles`, 5000);
+      route();
+    },
+    'sync-get': async () => {
+      const files = await pickFiles('.json,application/json', false);
+      if (!files.length) return;
+      toast('Merging…');
+      try {
+        const b = JSON.parse(await files[0].text());
+        const r = await mergeBundle(b);
+        LS.set('lastGet', Date.now());
+        if (b.kind === 'phone-copy') LS.set('lastBackup', Math.max(LS.get('lastBackup', 0), LS.get('lastSend', 0))); // computer already has what we sent
+        toast(`Up to date: ${r.added} new, ${r.updated} updated${b.createdAt ? ` · computer copy from ${rel(ts(b.createdAt))}` : ''}`, 5000);
+        route();
+      } catch (e) { toast(`That file couldn’t be read: ${e.message}`, 6000); }
+    },
+    backup: async () => { toast('Building backup…'); const b = await buildBundle({ photos: 'all' }); if (S.store.kind === 'local' && !EMBED) { const res = await shareOrDownload(`Mise backup ${todayISO()}.mise.json`, JSON.stringify(b)); if (res !== 'cancelled') { LS.set('lastBackup', Date.now()); toast('Backup saved'); route(); } return; } download(`mise-backup-${todayISO()}.mise.json`, JSON.stringify(b)); LS.set('lastBackup', Date.now()); },
   };
   const saveDens = () => { S.flat = C.flatDensities(S.densities); clearTimeout(saveDens._t); saveDens._t = setTimeout(() => S.store.saveDensities(S.densities), 400); };
   const cur = () => location.hash.split('/')[2];
@@ -4005,8 +4093,10 @@ body[data-view="cook"].has-timers .cook-nav { padding-bottom: .7rem; }
         return;
       }
     }
+    if (!LS.get('firstUse', 0)) LS.set('firstUse', Date.now());
     route();
     updateBadges();
+    if (S.store && S.store.kind === 'folder') { const pc = LS.get('phoneCopy', null); if (!pc || latestChange() > pc.at || [...S.recipes.values()].some((e) => ts(e.recipe.updatedAt) > pc.at)) schedulePhoneCopy(4000); }
     pollImports(false).catch(() => {});
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost') && window.top === window) {
       const hadController = !!navigator.serviceWorker.controller;
